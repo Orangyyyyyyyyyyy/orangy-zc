@@ -5,6 +5,32 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
   <section class="page-shell">
     <span class="page-kicker">DIGITAL LAB</span>
     <h1 class="page-title">数字实验室</h1>
-    <p class="page-intro">一些关于 AI、代码、数据与创意的交互实验。这里将逐步加入可以直接使用的小工具。</p>
+    <p class="page-intro">
+      一些关于 AI、代码、数据与创意的交互实验。下面这四个是可以直接点开用的——都是作品集里项目的在线 demo，
+      数据只存在你自己的浏览器里。
+    </p>
+
+    <div class="lab-grid">
+      <a class="lab-item" href="/demo/workspace/" target="_blank" rel="noreferrer noopener">
+        <span class="lab-no">01</span>
+        <b>个人工作台</b>
+        <small>仪表板 · 新闻示例 · 任务与打卡（演示数据）</small>
+      </a>
+      <a class="lab-item" href="/demo/crawler/" target="_blank" rel="noreferrer noopener">
+        <span class="lab-no">02</span>
+        <b>拾取 Harvester</b>
+        <small>粘贴一个网址，看任务从扫描走到归档（模拟）</small>
+      </a>
+      <a class="lab-item" href="/demo/shanhai/" target="_blank" rel="noreferrer noopener">
+        <span class="lab-no">03</span>
+        <b>山海司 · 巡荒录</b>
+        <small>可直接开局的卡牌 demo</small>
+      </a>
+      <a class="lab-item" href="/demo/cardshop/" target="_blank" rel="noreferrer noopener">
+        <span class="lab-no">04</span>
+        <b>卡牌店模拟经营</b>
+        <small>开一间店，从进货开始（浏览器版）</small>
+      </a>
+    </div>
   </section>
 </BaseLayout>

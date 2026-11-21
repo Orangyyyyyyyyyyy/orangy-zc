@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<title>卡牌店模拟经营 · 浏览器 Demo</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/main.css?v=0.4.1">
+<script>
+/* 启动诊断：脚本加载阶段出错时也能看到原因，而不是停在装载页 */
+(function () {
+  var pending = [];
+  function render() {
+    if (!document.body || !pending.length) return;
+    var box = document.getElementById('errbox');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'errbox';
+      box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#7a1f1f;color:#fff;font:12px/1.5 monospace;padding:8px 12px;max-height:160px;overflow:auto;white-space:pre-wrap';
+      document.body.appendChild(box);
+    }
+    box.textContent += pending.join('\n') + '\n';
+    pending = [];
+  }
+  window.addEventListener('error', function (e) {
+    pending.push('启动错误：' + (e.message || e.error) + (e.filename ? ' @ ' + e.filename + ':' + e.lineno : ''));
+    render();
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var r = e.reason;
+    pending.push('未处理异常：' + (r && (r.stack || r.message) || r));
+    render();
+  });
+  document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+</head>
+<body>
+<div id="boot">
+  <div class="boot-inner">
+    <img class="boot-art" src="assets/art/promo_boot.png" alt="">
+    <div class="boot-logo">CARD<span>SHOP</span></div>
+    <div class="boot-title">卡牌店模拟经营</div>
+    <div class="boot-sub">浏览器 Demo · 正在装载店铺…</div>
+    <div class="boot-bar"><i></i></div>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <canvas id="game"></canvas>
+
+  <!-- 顶部状态栏 -->
+  <header id="hud">
+    <div class="hud-left">
+      <div class="shop-badge">
+        <div class="lv" id="hud-level">Lv.1</div>
+        <div class="lv-info">
+          <div class="shop-name" id="hud-shopname">星光卡牌屋</div>
+          <div class="xp"><i id="hud-xpbar"></i><span id="hud-xptext">0 / 100</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="hud-center">
+      <div class="clock" id="hud-clock">第 1 天 · 07:00</div>
+      <div class="day-state" id="hud-state">准备阶段</div>
+      <div class="save-badge" id="hud-save"></div>
+    </div>
+    <div class="hud-right">
+      <div class="stat money"><span class="k">资金</span><b id="hud-money">¥4,000</b></div>
+      <div class="stat"><span class="k">评分</span><b id="hud-rating">60.0</b></div>
+      <div class="stat"><span class="k">知名度</span><b id="hud-fame">0</b></div>
+      <div class="speed-group" id="speed-group"></div>
+    </div>
+  </header>
+
+  <div id="side-note" class="side-note"></div>
+
+  <div id="interact" class="interact hidden"></div>
+
+  <div class="dock">
+    <div class="zoom-group" title="缩放：滚轮 / +- / 0 复位">
+      <button class="dock-btn icon" id="btn-zoom-out">−</button>
+      <span class="zoom-label" id="zoom-label">100%</span>
+      <button class="dock-btn icon" id="btn-zoom-in">+</button>
+      <button class="dock-btn icon" id="btn-zoom-fit">适应</button>
+    </div>
+    <button class="dock-btn" id="btn-tablet">平板 <kbd>TAB</kbd></button>
+    <button class="dock-btn" id="btn-build">设施 <kbd>B</kbd></button>
+    <button class="dock-btn" id="btn-open">开店</button>
+    <button class="dock-btn" id="btn-pause">暂停 <kbd>ESC</kbd></button>
+  </div>
+
+  <div id="buildbar" class="buildbar hidden"></div>
+  <div id="toasts" class="toasts"></div>
+
+  <div id="tablet" class="tablet hidden">
+    <div class="tablet-frame">
+      <div class="tablet-head">
+        <div class="tb-title">店铺平板</div>
+        <div class="tb-tabs" id="tablet-nav"></div>
+        <button class="tb-close" id="tablet-close">×</button>
+      </div>
+      <div class="tablet-body" id="tablet-body"></div>
+    </div>
+  </div>
+
+  <div id="modal-root"></div>
+</div>
+
+<script src="data/content.js?v=0.4.1"></script>
+<script src="data/ip_cards.js?v=0.4.1"></script>
+<script src="data/cards.js?v=0.4.1"></script>
+<script src="data/art.js?v=0.4.1"></script>
+<script src="src/core.js?v=0.4.1"></script>
+<script src="src/inventory.js?v=0.4.1"></script>
+<script src="src/market.js?v=0.4.1"></script>
+<script src="src/economy.js?v=0.4.1"></script>
+<script src="src/world.js?v=0.4.1"></script>
+<script src="src/game.js?v=0.4.1"></script>
+<script src="src/assets.js?v=0.4.1"></script>
+<script src="src/render.js?v=0.4.1"></script>
+<script src="src/ui.js?v=0.4.1"></script>
+<script src="src/main.js?v=0.4.1"></script>
+<script src="../demo-badge.js" defer></script>
+</body>
+</html>

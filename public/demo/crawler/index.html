@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#070a08">
+  <meta name="description" content="拾取 HARVESTER：输入网页、B 站视频或 X 推文链接，在本地抓取图片、文字与视频，自动去重、规范命名并打包成文件夹。">
+  <title>拾取 HARVESTER · 网页资源捕手</title>
+  <link rel="icon" href="/demo/crawler/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="demo-mock.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <noscript>
+    <div class="noscript-banner">拾取需要 JavaScript 才能运行。请在浏览器中启用 JavaScript 后刷新页面。</div>
+  </noscript>
+
+  <div class="backdrop" aria-hidden="true">
+    <div class="aurora aurora-a"></div>
+    <div class="aurora aurora-b"></div>
+    <div class="aurora aurora-c"></div>
+    <div class="grid-plane"></div>
+    <canvas id="particleCanvas"></canvas>
+    <div class="vignette"></div>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="拾取 HARVESTER 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <span class="brand-ring brand-ring-a"></span>
+        <span class="brand-ring brand-ring-b"></span>
+        <span class="brand-core"></span>
+      </span>
+      <span class="brand-copy">
+        <strong>拾取</strong>
+        <span>HARVESTER / LOCAL</span>
+      </span>
+    </a>
+    <div class="topbar-right">
+      <div class="engine-pill" id="enginePill">
+        <span class="status-dot"></span>
+        <span>本地引擎</span>
+        <b id="engineState">检测中</b>
+      </div>
+      <span class="version">v1.0</span>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow reveal">
+          <span class="eyebrow-index">01</span>
+          WEB RESOURCE HARVESTER
+          <span class="eyebrow-line"></span>
+        </p>
+        <h1 class="hero-title">
+          <span class="title-line"><span>把网页，</span></span>
+          <span class="title-line"><span>拆成可用的<em>素材</em>。</span></span>
+        </h1>
+        <p class="hero-lede">
+          输入一个链接，勾选你需要的资源。支持普通网页、<span class="nowrap">B 站视频页</span>与 <span class="nowrap">X 推文</span>，
+          本地抓取、去重、规范命名，最后打包成一个整洁的文件夹。
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <b>03</b>
+            <span>资源类型</span>
+          </div>
+          <div class="hero-meta-item">
+            <b>100%</b>
+            <span>本地处理</span>
+          </div>
+          <div class="hero-meta-item">
+            <b>ZIP</b>
+            <span>一键归档</span>
+          </div>
+        </div>
+
+        <div class="hero-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3l7 3v5c0 4.4-2.9 8.4-7 9.8C7.9 19.4 5 15.4 5 11V6l7-3z"/>
+            <path d="M9.5 11.5l1.7 1.7 3.6-3.8"/>
+          </svg>
+          <span title="X 推文解析会向公开镜像 fxTwitter 发送推文链接；所有文件只保存在本机">文件只存本地 · 部分平台经公开接口解析</span>
+        </div>
+
+        <div class="hero-orbit" aria-hidden="true">
+          <div class="orbit-label">SCAN</div>
+          <div class="orbit-ring"></div>
+          <div class="orbit-ring orbit-ring-b"></div>
+          <div class="orbit-dot"></div>
+          <div class="orbit-caption">
+            <span>READY</span>
+            <small>LOCAL / 127.0.0.1</small>
+          </div>
+        </div>
+      </div>
+
+      <section class="console reveal" id="console" aria-labelledby="consoleTitle">
+        <span class="corner corner-tl" aria-hidden="true"></span>
+        <span class="corner corner-tr" aria-hidden="true"></span>
+        <span class="corner corner-bl" aria-hidden="true"></span>
+        <span class="corner corner-br" aria-hidden="true"></span>
+
+        <div class="console-head">
+          <div class="console-heading">
+            <span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <h2 id="consoleTitle">新建拾取任务</h2>
+          </div>
+          <span class="console-code">JOB / 001</span>
+        </div>
+
+        <form id="crawlForm" novalidate>
+          <div class="field">
+            <div class="field-top">
+              <label for="urlInput">目标链接</label>
+              <span class="field-hint">HTTP / HTTPS</span>
+            </div>
+            <div class="url-wrap" id="urlWrap">
+              <svg class="url-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M10.6 13.4a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 0 0-5.7-5.7l-1.6 1.6"/>
+                <path d="M13.4 10.6a4 4 0 0 0-5.7 0l-2.8 2.8a4 4 0 0 0 5.7 5.7l1.6-1.6"/>
+              </svg>
+              <input
+                id="urlInput"
+                name="url"
+                type="url"
+                inputmode="url"
+                autocomplete="url"
+                spellcheck="false"
+                placeholder="https://example.com/article"
+                aria-describedby="urlError"
+              >
+              <button class="paste-btn" id="pasteBtn" type="button" title="从剪贴板粘贴">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="8" y="8" width="11" height="12" rx="2"/>
+                  <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2"/>
+                </svg>
+                粘贴
+              </button>
+            </div>
+            <p class="field-error" id="urlError" role="alert"></p>
+          </div>
+
+          <fieldset class="type-field">
+            <legend>需要什么？<span>可多选</span></legend>
+            <div class="type-grid">
+              <label class="type-card is-active" data-type="image">
+                <input type="checkbox" name="type" value="image" checked>
+                <span class="type-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="16" rx="3"/>
+                    <circle cx="9" cy="9" r="1.6"/>
+                    <path d="M4 17l5-5 4 4 3-3 4 4"/>
+                  </svg>
+                </span>
+                <span class="type-copy"><b>图片</b><small>IMG / SVG / WEBP</small></span>
+                <span class="type-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12.5l4 4L19 6.5"/></svg>
+                </span>
+                <span class="type-sheen" aria-hidden="true"></span>
+              </label>
+
+              <label class="type-card is-active" data-type="text">
+                <input type="checkbox" name="type" value="text" checked>
+                <span class="type-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <path d="M6 3h8l5 5v13H6z"/>
+                    <path d="M14 3v6h5M9 12h7M9 16h7"/>
+                  </svg>
+                </span>
+                <span class="type-copy"><b>文字</b><small>ARTICLE / TXT</small></span>
+                <span class="type-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12.5l4 4L19 6.5"/></svg>
+                </span>
+                <span class="type-sheen" aria-hidden="true"></span>
+              </label>
+
+              <label class="type-card" data-type="video">
+                <input type="checkbox" name="type" value="video">
+                <span class="type-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24">
+                    <rect x="3" y="5" width="14" height="14" rx="3"/>
+                    <path d="M17 10l4-2v8l-4-2z"/>
+                  </svg>
+                </span>
+                <span class="type-copy"><b>视频</b><small>MP4 / WEBM / MOV</small></span>
+                <span class="type-check" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path d="M5 12.5l4 4L19 6.5"/></svg>
+                </span>
+                <span class="type-sheen" aria-hidden="true"></span>
+              </label>
+            </div>
+            <p class="support-note">
+              <span class="support-tag">BILIBILI</span>
+              <span class="support-tag">X</span>
+              <span>已适配 B 站视频页与 X 推文 · 自动提取媒体</span>
+            </p>
+          </fieldset>
+
+          <div class="advanced">
+            <button class="advanced-toggle" id="advancedToggle" type="button" aria-expanded="false" aria-controls="advancedPanel">
+              <span>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+                高级选项
+              </span>
+              <svg class="chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5"/></svg>
+            </button>
+            <div class="advanced-panel" id="advancedPanel" hidden>
+              <div class="adv-grid">
+                <label class="mini-field">
+                  <span>最多抓取页面</span>
+                  <select id="maxPages">
+                    <option value="1" selected>仅入口页</option>
+                    <option value="3">最多 3 页</option>
+                    <option value="5">最多 5 页</option>
+                    <option value="10">最多 10 页</option>
+                  </select>
+                </label>
+                <label class="mini-field">
+                  <span>资源数量上限</span>
+                  <select id="maxAssets">
+                    <option value="30">30 个</option>
+                    <option value="80" selected>80 个</option>
+                    <option value="120">120 个</option>
+                    <option value="200">200 个</option>
+                  </select>
+                </label>
+                <label class="switch-field">
+                  <span>遵守 robots.txt<small>更礼貌的抓取方式</small></span>
+                  <input type="checkbox" id="respectRobots" checked>
+                  <span class="switch" aria-hidden="true"></span>
+                </label>
+              </div>
+              <p class="adv-note" id="limitsNote" title="可通过 HARVESTER_MAX_IMAGE_MB / HARVESTER_MAX_VIDEO_MB / HARVESTER_MAX_TOTAL_MB 环境变量调整，0 表示不限制">安全上限：图片 18MB / 视频 512MB · 单次归档 2GB</p>
+            </div>
+          </div>
+
+          <p class="form-error" id="formError" role="alert" aria-live="polite"></p>
+
+          <button class="primary-btn start-btn" id="startBtn" type="submit">
+            <span class="btn-label">开始拾取</span>
+            <span class="btn-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+            </span>
+            <span class="btn-shine" aria-hidden="true"></span>
+          </button>
+
+          <p class="legal">开始即表示你确认有权抓取该页面内容。请遵守版权与站点条款。</p>
+        </form>
+      </section>
+    </section>
+
+
+    <section class="queue-section section-shell" id="queueSection" hidden aria-labelledby="queueTitle">
+      <header class="section-head queue-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-index">02</span> TASK QUEUE<span class="eyebrow-line"></span></p>
+          <h2 id="queueTitle">拾取队列</h2>
+        </div>
+        <div class="queue-tools">
+          <label class="queue-auto">
+            <input type="checkbox" id="autoContinue" checked>
+            <span class="queue-switch" aria-hidden="true"></span>
+            <span>完成后自动继续</span>
+          </label>
+          <span class="queue-summary" id="queueSummary">0 个任务</span>
+        </div>
+      </header>
+      <div class="queue-list" id="queueList"></div>
+      <div class="queue-footer">
+        <span class="queue-hint" id="queueHint">任务会按添加顺序依次执行。抓取过程中可以继续添加下一轮链接。</span>
+        <button class="primary-btn queue-next-btn" id="nextTaskBtn" type="button" hidden>
+          <span class="btn-label">开始下一轮</span>
+          <span class="btn-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+          </span>
+          <span class="btn-shine" aria-hidden="true"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="stage section-shell" id="stage" hidden aria-live="polite">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-index">03</span> LIVE HARVEST<span class="eyebrow-line"></span></p>
+          <h2 id="stageTitle">正在扫描网页</h2>
+        </div>
+        <div class="stage-status" id="stageBadge">
+          <span class="status-dot"></span>
+          <span id="stageBadgeText">运行中</span>
+        </div>
+      </header>
+
+      <div class="stage-grid">
+        <div class="radar-card">
+          <div class="radar" id="radar" aria-hidden="true">
+            <div class="radar-ring radar-ring-1"></div>
+            <div class="radar-ring radar-ring-2"></div>
+            <div class="radar-ring radar-ring-3"></div>
+            <div class="radar-axis radar-axis-x"></div>
+            <div class="radar-axis radar-axis-y"></div>
+            <div class="radar-sweep"></div>
+            <span class="radar-blip blip-1"></span>
+            <span class="radar-blip blip-2"></span>
+            <span class="radar-blip blip-3"></span>
+            <span class="radar-blip blip-4"></span>
+            <span class="radar-blip blip-5"></span>
+            <div class="radar-core">
+              <span id="progressNumber">0</span><small>%</small>
+            </div>
+          </div>
+          <p class="radar-caption" id="phaseLabel">正在建立连接</p>
+          <p class="radar-sub"><span class="pulse-dot"></span><span id="elapsedLabel">00:00</span> ELAPSED</p>
+        </div>
+
+        <div class="telemetry">
+          <div class="progress-block">
+            <div class="progress-top">
+              <span id="progressPhase">准备中</span>
+              <span class="mono" id="progressText">0%</span>
+            </div>
+            <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressBar">
+              <span class="progress-fill" id="progressFill"></span>
+              <span class="progress-sheen" aria-hidden="true"></span>
+            </div>
+            <div class="phase-steps" id="phaseSteps">
+              <span data-step="parse">解析</span>
+              <span data-step="download">下载</span>
+              <span data-step="pack">归档</span>
+              <span data-step="done">完成</span>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat">
+              <span class="stat-label">页面</span>
+              <b id="statPages">0</b>
+            </div>
+            <div class="stat">
+              <span class="stat-label">图片</span>
+              <b id="statImages">0</b>
+            </div>
+            <div class="stat">
+              <span class="stat-label">视频</span>
+              <b id="statVideos">0</b>
+            </div>
+            <div class="stat">
+              <span class="stat-label">体积</span>
+              <b id="statBytes">0 B</b>
+            </div>
+          </div>
+
+          <div class="download-stream">
+            <div class="stream-head">
+              <span>实时收获</span>
+              <span class="mono" id="streamCount">0 FILES</span>
+            </div>
+            <div class="stream-list" id="streamList">
+              <p class="stream-empty">等待第一个资源…</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="terminal-panel">
+        <div class="terminal-head">
+          <span class="terminal-title"><i></i> TASK LOG</span>
+          <span class="terminal-hint">自动滚动</span>
+        </div>
+        <div class="terminal" id="logList" role="log" aria-live="polite" aria-label="任务日志"></div>
+      </div>
+
+      <div class="stage-actions">
+        <div class="stage-actions-group">
+          <button class="ghost-btn" id="addNextBtn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            添加下一轮
+          </button>
+          <button class="ghost-btn stop-btn" id="stopBtn" type="button">
+            <span class="stop-square" aria-hidden="true"></span>
+            停止当前任务
+          </button>
+        </div>
+        <span class="stage-hint" id="stageHint">任务在本地运行，所有资源只写入你的磁盘。</span>
+      </div>
+    </section>
+
+    <section class="result section-shell" id="result" hidden>
+      <header class="section-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-index">04</span> ARCHIVE READY<span class="eyebrow-line"></span></p>
+          <h2>拾取完成，已整理成包。</h2>
+        </div>
+        <div class="stage-status is-done"><span class="status-dot"></span><span>已完成</span></div>
+      </header>
+
+      <div class="result-hero">
+        <div class="result-summary">
+          <span class="result-badge"><span></span> PACKAGE SEALED</span>
+          <h3 id="resultTitle">资源已归档</h3>
+          <p id="resultSub">文件已按类型归入 images / videos / text，并附带清单与说明。</p>
+          <div class="result-actions">
+            <a class="primary-btn download-btn" id="downloadBtn" href="#" download>
+              <span class="btn-label">下载 ZIP</span>
+              <span class="btn-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+              </span>
+              <span class="btn-shine" aria-hidden="true"></span>
+            </a>
+            <button class="ghost-btn" id="revealBtn" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/></svg>
+              在 Finder 中显示
+            </button>
+            <button class="ghost-btn" id="copyPathBtn" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h2"/></svg>
+              复制路径
+            </button>
+          </div>
+          <div class="auto-continue-bar" id="autoContinueBar" hidden>
+            <span class="auto-pulse" aria-hidden="true"></span>
+            <div class="auto-copy">
+              <b id="autoContinueText">下一轮将在 4 秒后开始</b>
+              <small>队列中还有待处理任务</small>
+            </div>
+            <div class="auto-actions">
+              <button class="mini-btn" id="startNextNowBtn" type="button">立即开始</button>
+              <button class="mini-btn" id="pauseAutoBtn" type="button">暂停</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="package-card">
+          <div class="package-visual" aria-hidden="true">
+            <svg viewBox="0 0 120 96">
+              <defs>
+                <linearGradient id="folderGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#d7ff5f"/>
+                  <stop offset="1" stop-color="#58e6b8"/>
+                </linearGradient>
+              </defs>
+              <path class="folder-back" d="M10 24h37l9 9h54v49H10z"/>
+              <path class="folder-front" d="M10 36h100v46H10z"/>
+              <path class="folder-glow" d="M18 46h84" />
+            </svg>
+            <span class="package-spark spark-a"></span>
+            <span class="package-spark spark-b"></span>
+          </div>
+          <div class="package-info">
+            <small>PACKAGE NAME</small>
+            <b id="packageName">—</b>
+            <span id="packagePath">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-stats" id="resultStats">
+        <div class="result-stat"><span>页面</span><b id="resultPages">0</b></div>
+        <div class="result-stat"><span>图片</span><b id="resultImages">0</b></div>
+        <div class="result-stat"><span>视频</span><b id="resultVideos">0</b></div>
+        <div class="result-stat"><span>文字</span><b id="resultTextChars">0</b></div>
+        <div class="result-stat"><span>归档体积</span><b id="resultBytes">0 B</b></div>
+        <div class="result-stat"><span>耗时</span><b id="resultElapsed">0s</b></div>
+      </div>
+
+      <div class="result-columns">
+        <div class="gallery-panel">
+          <header class="panel-head">
+            <h3>图片预览 <span id="galleryCount">0</span></h3>
+            <span class="mono">IMAGES</span>
+          </header>
+          <div class="gallery" id="gallery">
+            <p class="empty-state">本次没有保存图片。</p>
+          </div>
+        </div>
+        <div class="files-panel">
+          <header class="panel-head">
+            <h3>文件清单</h3>
+            <span class="mono">FILES</span>
+          </header>
+          <div class="file-lists" id="fileLists"></div>
+        </div>
+      </div>
+
+      <div class="text-preview" id="textPreview" hidden>
+        <div class="panel-head">
+          <h3>文字快照</h3>
+          <span class="mono">TEXT PREVIEW</span>
+        </div>
+        <blockquote id="textPreviewBody"></blockquote>
+        <p class="text-preview-note">完整正文已保存至 <code>text/</code> 文件夹，包含每页独立文本与 <code>all_text.txt</code> 合集。</p>
+      </div>
+
+      <div class="result-footer">
+        <p id="resultWarnings"></p>
+        <button class="ghost-btn" id="newTaskBtn" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+          继续添加任务
+        </button>
+      </div>
+    </section>
+
+    <section class="how section-shell">
+      <header class="section-head">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-index">05</span> HOW IT WORKS<span class="eyebrow-line"></span></p>
+          <h2>三步，把散落的资源带走。</h2>
+        </div>
+        <p class="how-lede">没有云端队列，没有账号，没有等待。抓取引擎就运行在这台电脑上。</p>
+      </header>
+
+      <div class="how-grid">
+        <article class="how-card reveal">
+          <span class="how-index">01</span>
+          <div class="how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M10.6 13.4a4 4 0 0 0 5.7 0l2.8-2.8a4 4 0 0 0-5.7-5.7l-1.6 1.6"/><path d="M13.4 10.6a4 4 0 0 0-5.7 0l-2.8 2.8a4 4 0 0 0 5.7 5.7l1.6-1.6"/></svg>
+          </div>
+          <h3>贴入链接</h3>
+          <p>支持普通网页与同站内页。默认只抓入口页，也可以在高级选项里扩大范围。</p>
+        </article>
+        <article class="how-card reveal">
+          <span class="how-index">02</span>
+          <div class="how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/><circle cx="18" cy="17" r="2"/></svg>
+          </div>
+          <h3>勾选资源</h3>
+          <p>图片、文字、视频按需选择。引擎会自动识别真实格式、过滤占位图并做内容去重。</p>
+        </article>
+        <article class="how-card reveal">
+          <span class="how-index">03</span>
+          <div class="how-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 7h7l2 2h9v10H3z"/><path d="M12 11v5M9.5 13.5L12 16l2.5-2.5"/></svg>
+          </div>
+          <h3>收下文件夹</h3>
+          <p>统一命名、分类归档，附 manifest.json 与 README。可整包下载，也可直接在 Finder 打开。</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="footer-dot"></span>
+      <span>拾取 HARVESTER</span>
+      <small>LOCAL-FIRST RESOURCE ARCHIVER</small>
+    </div>
+    <p>请仅抓取你有权访问与保存的内容。尊重版权、隐私与 robots.txt。</p>
+    <span class="mono">BUILD 1.0 / PYTHON STDLIB</span>
+  </footer>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+</body>
+</html>

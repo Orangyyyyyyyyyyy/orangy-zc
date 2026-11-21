@@ -1,0 +1,208 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/works.css";
+import { projects } from "../../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((p, i) => ({
+    params: { slug: p.slug },
+    props: {
+      project: p,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+const { project, prev, next } = Astro.props as any;
+const p = project;
+---
+
+<BaseLayout title={`${p.title} · ORANGY ZC`} description={p.summary}>
+  <article class="w-wrap">
+    <header class="d-head">
+      <a class="d-back" href="/works/">← 返回作品集</a>
+
+      <div class="d-no">PROJECT {p.no} · {p.year}</div>
+      <h1 class="d-title">{p.title}</h1>
+      <div class="d-en">{p.en}</div>
+      <p class="d-tagline">{p.tagline}</p>
+
+      <div class="d-meta">
+        <div>
+          <span>Status</span>
+          <b>{p.status}</b>
+        </div>
+        <div>
+          <span>Category</span>
+          <b>{p.category}</b>
+        </div>
+        <div>
+          <span>Year</span>
+          <b>{p.year}</b>
+        </div>
+        <div>
+          <span>Stack</span>
+          <b>{p.tech.slice(0, 2).join(" · ")}</b>
+        </div>
+      </div>
+
+      <div class="d-actions">
+        {p.demo && (
+          <a class="text-link" href={p.demo} target="_blank" rel="noreferrer noopener">
+            在线体验 <span aria-hidden="true">↗</span>
+          </a>
+        )}
+        <a class="text-link" href="#overview">先看介绍 <span aria-hidden="true">↓</span></a>
+      </div>
+
+      <figure class="d-cover">
+        <img src={p.cover} alt={`${p.title} 主视觉`} />
+      </figure>
+    </header>
+
+    <section class="d-section" id="overview">
+      <div class="d-label">
+        <span>01</span>
+        <h2>Overview</h2>
+      </div>
+      <div class="d-prose">
+        {p.overview.map((para: string) => <p>{para}</p>)}
+      </div>
+
+      <div class="d-stats">
+        {
+          p.stats.map((s: any) => (
+            <div>
+              <b>{s.value}</b>
+              <span>{s.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>02</span>
+        <h2>Features</h2>
+      </div>
+      <div class="d-features">
+        {
+          p.features.map((f: any, i: number) => (
+            <div class="d-feature">
+              <h3>
+                <i>{String(i + 1).padStart(2, "0")}</i>
+                {f.title}
+              </h3>
+              <p>{f.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>03</span>
+        <h2>Preview</h2>
+      </div>
+      <div class="d-gallery">
+        {
+          p.gallery.map((g: any) => (
+            <figure>
+              <img src={g.src} alt={g.caption} loading="lazy" />
+              <figcaption>{g.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      {p.demo && (
+        <div class="d-demo">
+          <div>
+            <b>这个 demo 是真的能点的</b>
+            <p>演示版不含任何密钥与个人数据，所有操作只发生在你自己的浏览器里。</p>
+          </div>
+          <a class="text-link" href={p.demo} target="_blank" rel="noreferrer noopener">
+            打开 demo <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      )}
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>04</span>
+        <h2>Challenge &amp; Solution</h2>
+      </div>
+      <div class="d-duo">
+        {
+          p.challenges.map((c: any) => (
+            <div class="d-duo-row">
+              <div>
+                <h4>问题</h4>
+                <p>{c.problem}</p>
+              </div>
+              <div>
+                <h4>做法</h4>
+                <p>{c.solution}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>05</span>
+        <h2>Development</h2>
+      </div>
+      <div class="d-timeline">
+        {
+          p.devSteps.map((s: any) => (
+            <div class="d-step">
+              <div class="ph">{s.phase}</div>
+              <div>
+                <h4>{s.title}</h4>
+                <p>{s.desc}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>06</span>
+        <h2>Tech Stack</h2>
+      </div>
+      <div class="d-tech">
+        {p.tech.map((t: string) => <span>{t}</span>)}
+      </div>
+    </section>
+
+    <section class="d-section">
+      <div class="d-label">
+        <span>07</span>
+        <h2>Next</h2>
+      </div>
+      <ul class="d-next">
+        {p.next.map((n: string) => <li>{n}</li>)}
+      </ul>
+
+      <div class="d-pager">
+        <a href={`/works/${prev.slug}/`}>
+          <span>← Previous</span>
+          <b>{prev.title}</b>
+        </a>
+        <a href={`/works/${next.slug}/`}>
+          <span>Next →</span>
+          <b>{next.title}</b>
+        </a>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

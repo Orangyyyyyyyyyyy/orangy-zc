@@ -1,0 +1,277 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520">
+  <defs>
+    <radialGradient id="halo" cx=".5" cy=".42" r=".56">
+      <stop offset="0" stop-color="#f0e6cf" stop-opacity=".30"/>
+      <stop offset=".46" stop-color="#b9c9b2" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#8ca38c" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="core" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#fff7e4" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#fff7e4" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4edde"/>
+      <stop offset=".45" stop-color="#ded4bf"/>
+      <stop offset="1" stop-color="#9b9282"/>
+    </linearGradient>
+    <linearGradient id="robeShade" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8f8778" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#8f8778" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fbf5e8"/>
+      <stop offset=".6" stop-color="#ddd2bb"/>
+      <stop offset="1" stop-color="#a99e88"/>
+    </linearGradient>
+    <linearGradient id="antler" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#cbbfa4"/>
+      <stop offset="1" stop-color="#f6efdd"/>
+    </linearGradient>
+    <linearGradient id="sash" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7d693c"/>
+      <stop offset=".5" stop-color="#e0c98f"/>
+      <stop offset="1" stop-color="#7d693c"/>
+    </linearGradient>
+    <radialGradient id="vig" cx=".5" cy=".45" r=".72">
+      <stop offset=".52" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".52"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
+  </defs>
+
+  <style>
+    .breathe { animation: breathe 7.4s ease-in-out infinite; transform-origin: 200px 470px; }
+    .hair { animation: hairSway 9s ease-in-out infinite; transform-origin: 200px 170px; }
+    .scrollG { animation: scrollBob 6.2s ease-in-out infinite; transform-origin: 288px 262px; }
+    .scrollPaper { animation: unfurl 9.5s ease-in-out infinite; transform-origin: 288px 232px; }
+    .cloudA { animation: cloudA 11s ease-in-out infinite; }
+    .cloudB { animation: cloudB 13s ease-in-out infinite; }
+    .mote { animation: mote 8s ease-in-out infinite; }
+    .ring { animation: spin 70s linear infinite; transform-origin: 200px 225px; }
+    .eyeSig { animation: eyeSig 5.2s ease-in-out infinite; transform-origin: 200px 225px; }
+    .eyeSig.e2 { animation-delay: 1.2s; }
+    .eyeSig.e3 { animation-delay: 2.4s; }
+    .eyeSig.e4 { animation-delay: 3.4s; }
+    .thirdEye { animation: thirdEye 6.6s ease-in-out infinite; transform-origin: 200px 182px; }
+    .companion { animation: companion 6.8s ease-in-out infinite; transform-origin: 105px 500px; }
+    .tailC { animation: tailC 7.2s ease-in-out infinite; transform-origin: 122px 420px; }
+    .glyph { animation: glyph 6s ease-in-out infinite; }
+    .glyph.g2 { animation-delay: 1s; }
+    .glyph.g3 { animation-delay: 2s; }
+    .glyph.g4 { animation-delay: 3s; }
+    .glint { animation: glint 7s ease-in-out infinite; }
+    @keyframes breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes hairSway { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(.9deg); } }
+    @keyframes scrollBob { 0%,100% { transform: translateY(0) rotate(-6deg); } 50% { transform: translateY(-7px) rotate(-4deg); } }
+    @keyframes unfurl { 0%,70%,100% { transform: scaleY(1); } 82% { transform: scaleY(.72); } }
+    @keyframes cloudA { 0%,100% { transform: translateX(0); opacity:.55; } 50% { transform: translateX(8px); opacity:.8; } }
+    @keyframes cloudB { 0%,100% { transform: translateX(0); opacity:.45; } 50% { transform: translateX(-9px); opacity:.7; } }
+    @keyframes mote { 0%,100% { transform: translateY(0); opacity:.15; } 45% { opacity:.85; } 100% { transform: translateY(-26px); opacity:0; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes eyeSig { 0%,88%,100% { opacity:.28; } 92%,96% { opacity:.9; } }
+    @keyframes thirdEye { 0%,86%,100% { transform: scaleY(1); opacity:1; } 90% { transform: scaleY(.12); opacity:.5; } 94% { transform: scaleY(1); opacity:1; } }
+    @keyframes companion { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+    @keyframes tailC { 0%,100% { transform: rotate(-2deg); } 50% { transform: rotate(4deg); } }
+    @keyframes glyph { 0%,100% { opacity:.25; transform: translateY(0); } 40% { opacity:.9; } 100% { transform: translateY(-14px); opacity:0; } }
+    @keyframes glint { 0%,100% { opacity:.2; } 50% { opacity:.9; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+
+  <circle cx="200" cy="225" r="178" fill="url(#halo)"/>
+  <circle cx="200" cy="225" r="176" fill="none" stroke="#c9a961" stroke-opacity=".22"/>
+  <g class="ring" fill="none" stroke="#c9a961" stroke-opacity=".18">
+    <circle cx="200" cy="225" r="158" stroke-dasharray="1 9"/>
+    <circle cx="200" cy="225" r="143" stroke-dasharray="16 26"/>
+    <path d="M200 62 L210 78 L200 94 L190 78 Z"/>
+    <path d="M200 356 L210 372 L200 388 L190 372 Z"/>
+    <path d="M42 225 L58 215 L74 225 L58 235 Z"/>
+    <path d="M326 225 L342 215 L358 225 L342 235 Z"/>
+  </g>
+  <circle cx="200" cy="225" r="120" fill="url(#core)"/>
+
+  <!-- 白泽所知 · 环生诸目 -->
+  <g class="eyeSig" fill="none" stroke="#e8d3a0" stroke-width="1.2">
+    <path d="M156 96 Q166 88 176 96 Q166 104 156 96 Z"/><circle cx="166" cy="96" r="1.8" fill="#e8d3a0" stroke="none"/>
+    <path d="M244 96 Q254 88 264 96 Q254 104 244 96 Z"/><circle cx="254" cy="96" r="1.8" fill="#e8d3a0" stroke="none"/>
+    <path d="M84 196 Q94 188 104 196 Q94 204 84 196 Z"/><circle cx="94" cy="196" r="1.8" fill="#e8d3a0" stroke="none"/>
+    <path d="M316 196 Q326 188 336 196 Q326 204 316 196 Z"/><circle cx="326" cy="196" r="1.8" fill="#e8d3a0" stroke="none"/>
+  </g>
+  <g class="eyeSig e2" fill="none" stroke="#e8d3a0" stroke-width="1.2">
+    <path d="M70 300 Q80 292 90 300 Q80 308 70 300 Z"/><circle cx="80" cy="300" r="1.8" fill="#e8d3a0" stroke="none"/>
+    <path d="M330 300 Q340 292 350 300 Q340 308 330 300 Z"/><circle cx="340" cy="300" r="1.8" fill="#e8d3a0" stroke="none"/>
+  </g>
+
+  <!-- 祥云 -->
+  <g fill="none" stroke="#c9a961" stroke-opacity=".3" stroke-width="1.5">
+    <path class="cloudA" d="M66 420 C84 404 110 404 124 418 C136 430 132 444 118 448 C107 450 101 442 106 435"/>
+    <path class="cloudB" d="M334 432 C316 416 290 416 276 430 C264 442 268 456 282 460 C293 462 299 454 294 447"/>
+  </g>
+
+  <g class="breathe">
+    <!-- 麒麟尾 -->
+    <g class="tailC">
+      <path d="M126 414 C92 430 66 462 72 494 C78 514 98 518 108 506 C92 496 90 476 104 460 C116 446 132 438 142 432 Z" fill="url(#hair)" opacity=".9"/>
+      <path d="M72 494 C62 500 58 512 64 520 L88 520 C78 512 76 502 82 492 Z" fill="#f4edde" opacity=".85"/>
+      <path d="M104 460 C116 452 126 446 136 440" fill="none" stroke="#b9ad95" stroke-width="1" opacity=".5"/>
+    </g>
+
+    <!-- 长发 -->
+    <g class="hair" fill="url(#hair)">
+      <path d="M154 198 C132 250 128 330 142 410 C148 444 164 452 174 434 C160 368 158 290 170 224 Z"/>
+      <path d="M246 198 C268 250 272 330 258 410 C252 444 236 452 226 434 C240 368 242 290 230 224 Z"/>
+      <path d="M168 210 C154 282 156 360 168 424 C172 398 174 344 180 296 Z" fill="#fbf6e9" opacity=".55"/>
+      <path d="M232 210 C246 282 244 360 232 424 C228 398 226 344 220 296 Z" fill="#fbf6e9" opacity=".4"/>
+    </g>
+
+    <!-- 身形 · 白袍 -->
+    <path d="M116 520 Q112 424 138 354 Q154 314 200 308 Q246 314 262 354 Q288 424 284 520 Z" fill="url(#robe)"/>
+    <path d="M200 308 Q246 314 262 354 Q288 424 284 520 L230 520 Q242 420 220 350 Z" fill="url(#robeShade)"/>
+    <path d="M168 306 L200 392 L232 306 L216 296 L200 342 L184 296 Z" fill="#1c2426"/>
+    <path d="M200 346 L200 520" stroke="#8a7448" stroke-opacity=".35"/>
+    <path d="M118 470 Q200 500 282 470 M112 500 Q200 528 288 500" fill="none" stroke="#c9a961" stroke-opacity=".22"/>
+    <path d="M130 360 Q200 386 270 360" fill="none" stroke="#b9ad95" stroke-opacity=".4"/>
+
+    <!-- 肩披 · 白泽鬃毛 -->
+    <g fill="#f4edde">
+      <path d="M126 350 Q142 326 170 320 L160 340 L176 326 L172 350 L190 334 L188 356 L206 336 L206 360 L222 338 L224 360 L240 338 L242 358 L258 336 L260 356 L274 338 Q276 356 268 366 Q236 382 200 380 Q164 382 132 366 Q124 360 126 350 Z"/>
+    </g>
+    <g fill="#e3d9c4" opacity=".9">
+      <path d="M132 366 Q150 376 170 376 L162 388 Q146 386 134 378 Z"/>
+      <path d="M268 366 Q250 376 230 376 L238 388 Q254 386 266 378 Z"/>
+    </g>
+    <path d="M126 352 Q200 376 274 352" fill="none" stroke="#c9a961" stroke-opacity=".4"/>
+
+    <!-- 腰带 -->
+    <path d="M146 438 Q200 462 254 438 L256 456 Q200 482 144 456 Z" fill="url(#sash)"/>
+    <path d="M184 458 L182 520 M216 458 L218 520" stroke="#8a6f3c" stroke-opacity=".45" stroke-width="2"/>
+    <circle cx="200" cy="452" r="7" fill="#c9a961" opacity=".9"/><circle cx="200" cy="452" r="3" fill="#6b5a34"/>
+
+    <!-- 头颈 -->
+    <path d="M178 276 Q200 288 222 276 L226 306 L174 306 Z" fill="#e8dfcb"/>
+    <ellipse cx="200" cy="214" rx="46" ry="52" fill="#f0e7d3"/>
+    <path d="M200 162 Q244 164 248 214 Q250 250 236 268 Q222 282 200 284 Q178 282 164 268 Q150 250 152 214 Q156 164 200 162 Z" fill="#f0e7d3"/>
+    <path d="M200 162 Q244 164 248 214 Q250 250 236 268 Q222 282 200 284 Q214 254 214 214 Q214 178 200 162 Z" fill="#000" opacity=".05"/>
+
+    <!-- 麒麟耳 -->
+    <path d="M158 186 Q140 164 142 140 Q160 156 174 176 Z" fill="#efe5d0"/>
+    <path d="M242 186 Q260 164 258 140 Q240 156 226 176 Z" fill="#efe5d0"/>
+    <path d="M150 152 Q158 164 166 174 M250 152 Q242 164 234 174" fill="none" stroke="#c9b99c" stroke-width="1.2"/>
+
+    <!-- 双角 -->
+    <g fill="url(#antler)" stroke="#b9a985" stroke-width="1">
+      <path d="M176 160 C162 120 154 84 158 48 C166 72 174 96 184 122 L190 108 C194 128 190 146 186 160 Z"/>
+      <path d="M158 48 C150 58 144 70 142 84 C152 78 160 68 164 58 Z"/>
+      <path d="M224 160 C238 120 246 84 242 48 C234 72 226 96 216 122 L210 108 C206 128 210 146 214 160 Z"/>
+      <path d="M242 48 C250 58 256 70 258 84 C248 78 240 68 236 58 Z"/>
+    </g>
+    <circle cx="160" cy="56" r="4" fill="#e8d3a0" filter="url(#glow)" opacity=".8"/>
+    <circle cx="240" cy="56" r="4" fill="#e8d3a0" filter="url(#glow)" opacity=".8"/>
+
+    <!-- 额间 · 第三目 -->
+    <g class="thirdEye">
+      <path d="M178 182 Q200 164 222 182 Q200 200 178 182 Z" fill="#c9a961" opacity=".25"/>
+      <path d="M178 182 Q200 164 222 182 Q200 200 178 182 Z" fill="none" stroke="#e8d3a0" stroke-width="1.8"/>
+      <circle cx="200" cy="182" r="6.6" fill="#d9b96c" filter="url(#glow)"/>
+      <ellipse cx="200" cy="182" rx="2.4" ry="5.4" fill="#1a1d1a"/>
+      <circle cx="197.6" cy="179.6" r="1.6" fill="#fff8e6"/>
+    </g>
+
+    <!-- 眉眼 -->
+    <path d="M172 208 Q184 202 194 209" fill="none" stroke="#3d3a31" stroke-width="2" stroke-linecap="round"/>
+    <path d="M228 208 Q216 202 206 209" fill="none" stroke="#3d3a31" stroke-width="2" stroke-linecap="round"/>
+    <path d="M174 216 Q184 222 192 216" fill="none" stroke="#4a463a" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M226 216 Q216 222 208 216" fill="none" stroke="#4a463a" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M198 228 Q200 232 202 228" fill="none" stroke="#9c8f76" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M191 244 Q200 249 209 244" fill="none" stroke="#a89a80" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M200 160 L206 170 L200 180 L194 170 Z" fill="#b3453c" opacity=".85"/>
+
+    <!-- 发冠 -->
+    <path d="M160 160 Q200 138 240 160 Q224 148 200 146 Q176 148 160 160 Z" fill="#f6efdd"/>
+    <path d="M200 136 L209 152 L200 160 L191 152 Z" fill="#b3453c"/>
+    <path d="M160 160 Q200 146 240 160" fill="none" stroke="#c9a961" stroke-opacity=".5"/>
+
+    <!-- 左臂 · 托云 -->
+    <path d="M130 386 Q114 420 126 456 Q138 480 156 470 Q148 436 156 402 Z" fill="#e3d9c4"/>
+    <path d="M118 452 Q108 468 116 482 L142 480 Q132 464 138 450 Z" fill="#d8cdb6"/>
+    <g filter="url(#glow)" class="glint">
+      <circle cx="122" cy="438" r="12" fill="#e8d3a0" opacity=".22"/>
+      <circle cx="122" cy="438" r="4.5" fill="#f6ead0"/>
+    </g>
+    <!-- 右臂 · 持卷 -->
+    <path d="M268 386 Q286 418 274 456 Q262 480 244 470 Q252 436 244 402 Z" fill="#e3d9c4"/>
+    <path d="M256 452 Q248 468 258 482 L280 474 Q270 460 274 448 Z" fill="#d8cdb6"/>
+  </g>
+
+  <!-- 漂浮卷轴 · 白泽图 -->
+  <g class="scrollG"><g transform="translate(272 232) rotate(-8)">
+    <rect x="2" y="-7" width="38" height="13" rx="5" fill="#5b4327" stroke="#c9a961" stroke-opacity=".55"/>
+    <circle cx="3" cy="-1" r="3" fill="#c9a961" opacity=".8"/>
+    <circle cx="39" cy="-1" r="3" fill="#c9a961" opacity=".8"/>
+    <g class="scrollPaper">
+      <rect x="6" y="4" width="30" height="104" rx="2" fill="#f4ecd8" opacity=".97"/>
+      <rect x="6" y="4" width="30" height="104" rx="2" fill="none" stroke="#a98d54" stroke-opacity=".75"/>
+      <rect x="6" y="10" width="30" height="5" fill="#8f3428" opacity=".6"/>
+      <path d="M12 22 H30 M12 32 H30 M12 42 H26 M12 52 H30 M12 62 H24 M12 72 H28 M12 82 H26"
+        stroke="#5f5848" stroke-opacity=".7" stroke-width="1.4"/>
+      <rect x="14" y="88" width="14" height="14" rx="1" fill="#b3453c" opacity=".85"/>
+      <path d="M21 91 V99 M18 95 H24" stroke="#f4ecd8" stroke-width="1.2" opacity=".8"/>
+    </g>
+    <rect x="2" y="106" width="38" height="13" rx="5" fill="#5b4327" stroke="#c9a961" stroke-opacity=".55"/>
+    <circle cx="3" cy="112" r="3" fill="#c9a961" opacity=".8"/>
+    <circle cx="39" cy="112" r="3" fill="#c9a961" opacity=".8"/>
+    <path d="M40 6 Q50 60 40 106" fill="none" stroke="#b3453c" stroke-opacity=".5" stroke-width="1.4"/>
+  </g></g>
+  <g fill="none" stroke="#e8d3a0" stroke-width="1.2" opacity=".7">
+    <path class="glyph" d="M282 268 l6 6 l-6 6 l-6 -6 Z"/>
+    <path class="glyph g2" d="M336 276 l5 5 l-5 5 l-5 -5 Z"/>
+    <circle class="glyph g3" cx="326" cy="426" r="3"/>
+    <path class="glyph g4" d="M276 404 h10 M281 399 v10"/>
+  </g>
+
+  <!-- 白泽图 · 悬浮符简 -->
+  <g opacity=".8">
+    <g transform="translate(58 186) rotate(-8)">
+      <rect x="-1.5" y="-1.5" width="23" height="65" rx="2" fill="#2a2014" opacity=".8"/>
+      <rect width="20" height="62" rx="2" fill="#e9dfc7" opacity=".95"/>
+      <rect width="20" height="62" rx="2" fill="none" stroke="#c9a961" stroke-opacity=".6"/>
+      <rect x="0" y="5" width="20" height="4" fill="#8f3428" opacity=".7"/>
+      <path d="M5 14 H15 M5 22 H13 M5 30 H15 M5 38 H12 M5 46 H15" stroke="#4f4839" stroke-opacity=".7" stroke-width="1.2"/>
+      <rect x="5" y="50" width="10" height="9" fill="#b3453c" opacity=".8"/>
+      <path d="M10 52 V57 M8 54 H12" stroke="#f4ecd8" stroke-width=".9"/>
+    </g>
+    <g transform="translate(80 226) rotate(9)" opacity=".75">
+      <rect width="16" height="48" rx="2" fill="#e6dcc4" opacity=".9"/>
+      <rect width="16" height="48" rx="2" fill="none" stroke="#b99a5c" stroke-opacity=".6"/>
+      <rect x="0" y="4" width="16" height="3" fill="#8f3428" opacity=".6"/>
+      <path d="M4 12 H12 M4 19 H11 M4 26 H12 M4 33 H9" stroke="#4f4839" stroke-opacity=".65" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- 伴生小兽 -->
+  <g class="companion"><g transform="translate(58 420) scale(.72)">
+    <path d="M56 44 C36 44 24 60 26 80 C28 98 44 108 64 106 C86 104 98 90 96 70 C94 52 78 44 56 44 Z" fill="#e8dfca"/>
+    <path d="M34 44 Q28 22 40 12 Q48 28 48 44 Z" fill="#efe6d2"/>
+    <path d="M78 44 Q84 22 72 12 Q64 28 64 44 Z" fill="#efe6d2"/>
+    <path d="M56 44 C44 44 36 54 36 68 C36 82 46 92 58 92 C70 92 80 82 80 68 C80 54 70 44 56 44 Z" fill="#f4edde"/>
+    <circle cx="48" cy="66" r="2.4" fill="#4a463a"/><circle cx="66" cy="66" r="2.4" fill="#4a463a"/>
+    <path d="M54 74 Q58 78 62 74" fill="none" stroke="#a89a80" stroke-width="1.4"/>
+    <path d="M22 86 C6 78 -2 62 4 48 C8 62 18 72 32 78 Z" fill="#e8dfca" opacity=".9"/>
+  </g></g>
+
+  <!-- 粒子 -->
+  <g fill="#f4edde">
+    <circle class="mote" cx="110" cy="300" r="1.8" opacity=".6"/>
+    <circle class="mote" cx="300" cy="240" r="1.4" opacity=".5" style="animation-delay:1.4s"/>
+    <circle class="mote" cx="250" cy="120" r="1.2" opacity=".4" style="animation-delay:2.6s"/>
+    <circle class="mote" cx="86" cy="360" r="1.6" opacity=".5" style="animation-delay:3.4s"/>
+    <circle class="mote" cx="330" cy="360" r="1.2" opacity=".4" style="animation-delay:4.1s"/>
+  </g>
+
+  <rect width="400" height="520" fill="url(#vig)"/>
+</svg>

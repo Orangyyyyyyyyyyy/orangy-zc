@@ -1,0 +1,342 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520">
+  <defs>
+    <radialGradient id="halo" cx=".5" cy=".44" r=".58">
+      <stop offset="0" stop-color="#9fb4e8" stop-opacity=".24"/>
+      <stop offset=".46" stop-color="#4d5f8c" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#1d2742" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="core" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#a9c6ff" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#a9c6ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3550"/>
+      <stop offset=".55" stop-color="#1b2233"/>
+      <stop offset="1" stop-color="#0a0e18"/>
+    </linearGradient>
+    <linearGradient id="trim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3d4c72"/>
+      <stop offset=".5" stop-color="#b8c6e8"/>
+      <stop offset="1" stop-color="#3d4c72"/>
+    </linearGradient>
+    <linearGradient id="feather" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d4dcef"/>
+      <stop offset=".45" stop-color="#8593b8"/>
+      <stop offset="1" stop-color="#3c496b"/>
+    </linearGradient>
+    <linearGradient id="featherDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#39466a"/>
+      <stop offset="1" stop-color="#141b2c"/>
+    </linearGradient>
+    <linearGradient id="bone" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0ead8"/>
+      <stop offset="1" stop-color="#b9b29c"/>
+    </linearGradient>
+    <linearGradient id="staff" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6a5a3c"/>
+      <stop offset="1" stop-color="#231c12"/>
+    </linearGradient>
+    <radialGradient id="flame" cx=".5" cy=".62" r=".55">
+      <stop offset="0" stop-color="#e6f6ff" stop-opacity=".95"/>
+      <stop offset=".4" stop-color="#7fb6dc" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#3d7f9e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="vig" cx=".5" cy=".45" r=".72">
+      <stop offset=".5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity=".55"/>
+    </radialGradient>
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="3.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <style>
+    .breathe { animation: breathe 7.8s ease-in-out infinite; transform-origin: 200px 500px; }
+    .plume { animation: plume 9s ease-in-out infinite; transform-origin: 200px 170px; }
+    .plume.p2 { animation-delay: .7s; }
+    .plume.p3 { animation-delay: 1.3s; }
+    .mantle { animation: mantle 7s ease-in-out infinite; transform-origin: 200px 330px; }
+    .flame { animation: flame 3.4s ease-in-out infinite; transform-origin: 290px 262px; }
+    .flame2 { animation: flame2 2.8s ease-in-out infinite; transform-origin: 290px 262px; }
+    .snake { animation: snake 8s ease-in-out infinite; transform-origin: 300px 460px; }
+    .snakeHead { animation: snakeHead 6s ease-in-out infinite; transform-origin: 300px 300px; }
+    .slip { animation: slip 9s ease-in-out infinite; transform-origin: 200px 240px; }
+    .slip.s2 { animation-delay: 1.2s; }
+    .slip.s3 { animation-delay: 2.4s; }
+    .slip.s4 { animation-delay: 3.4s; }
+    .ring { animation: spin 120s linear infinite; transform-origin: 200px 230px; }
+    .star { animation: star 5.6s ease-in-out infinite; }
+    .star.s2 { animation-delay: 1.1s; } .star.s3 { animation-delay: 2.2s; } .star.s4 { animation-delay: 3.3s; }
+    .eye { animation: eye 6.8s ease-in-out infinite; }
+    .mote { animation: mote 7s ease-in-out infinite; }
+    @keyframes breathe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes plume { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(1.6deg); } }
+    @keyframes mantle { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.006); } }
+    @keyframes flame { 0%,100% { transform: scaleY(1) skewX(0); opacity:.9; } 40% { transform: scaleY(1.12) skewX(3deg); opacity:1; } 70% { transform: scaleY(.94) skewX(-2deg); opacity:.85; } }
+    @keyframes flame2 { 0%,100% { transform: scale(1) translateY(0); opacity:.55; } 50% { transform: scale(1.18) translateY(-4px); opacity:.85; } }
+    @keyframes snake { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(1.4deg); } }
+    @keyframes snakeHead { 0%,100% { transform: translateX(0) rotate(0deg); } 50% { transform: translateX(4px) rotate(4deg); } }
+    @keyframes slip { 0%,100% { transform: translateY(0) rotate(-1deg); opacity:.7; } 50% { transform: translateY(-9px) rotate(2deg); opacity:1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes star { 0%,100% { opacity:.2; } 50% { opacity:1; } }
+    @keyframes eye { 0%,88%,100% { opacity:1; } 92% { opacity:.4; } 95% { opacity:1; } }
+    @keyframes mote { 0% { transform: translateY(0); opacity:0; } 20% { opacity:.8; } 100% { transform: translateY(-70px); opacity:0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+
+  <circle cx="200" cy="230" r="182" fill="url(#halo)"/>
+  <circle cx="200" cy="230" r="178" fill="none" stroke="#c9a961" stroke-opacity=".16"/>
+  <g class="ring" fill="none" stroke="#9fb4e8" stroke-opacity=".2">
+    <circle cx="200" cy="230" r="160" stroke-dasharray="2 9"/>
+    <circle cx="200" cy="230" r="144" stroke-dasharray="18 26"/>
+    <path d="M200 58 l10 17 l-10 17 l-10 -17 Z"/>
+    <path d="M200 368 l10 17 l-10 17 l-10 -17 Z"/>
+  </g>
+  <circle cx="200" cy="230" r="126" fill="url(#core)"/>
+
+  <!-- 灵山星图 -->
+  <g fill="#d4dcef">
+    <circle class="star" cx="92" cy="118" r="1.8"/>
+    <circle class="star s2" cx="132" cy="86" r="1.3"/>
+    <circle class="star s3" cx="286" cy="104" r="1.6"/>
+    <circle class="star s4" cx="326" cy="150" r="2"/>
+    <circle class="star s2" cx="72" cy="208" r="1.2"/>
+    <circle class="star s3" cx="330" cy="250" r="1.4"/>
+    <circle class="star" cx="108" cy="330" r="1.2"/>
+    <circle class="star s4" cx="296" cy="344" r="1.3"/>
+  </g>
+  <g fill="none" stroke="#9fb4e8" stroke-opacity=".18" stroke-width="1">
+    <path d="M92 118 L132 86 L180 106 L220 82 L286 104 L326 150"/>
+    <path d="M72 208 L92 118 M330 250 L326 150"/>
+  </g>
+
+  <g class="breathe">
+    <!-- 羽冠 -->
+    <g class="plume">
+      <path d="M186 160 C176 118 168 78 172 40 C188 74 198 116 202 154 Z" fill="url(#feather)" stroke="#c9a961" stroke-opacity=".25"/>
+      <path d="M186 160 C190 122 194 88 196 62" fill="none" stroke="#e8eefc" stroke-opacity=".45"/>
+      <path d="M200 156 C202 110 210 70 224 36 C230 78 224 122 214 156 Z" fill="url(#featherDark)" stroke="#8fa3cc" stroke-opacity=".35"/>
+      <path d="M214 156 C220 118 230 82 246 52 C246 94 236 132 224 158 Z" fill="url(#feather)" stroke="#c9a961" stroke-opacity=".2"/>
+    </g>
+    <!-- 羽披 -->
+    <g class="mantle" fill="url(#featherDark)">
+      <path d="M112 352 C86 372 72 404 78 438 C96 420 108 404 116 384 Z"/>
+      <path d="M288 352 C314 372 328 404 322 438 C304 420 292 404 284 384 Z"/>
+      <path d="M102 340 C84 356 74 378 76 400 C94 386 108 370 116 354 Z" fill="#2c3855"/>
+      <path d="M298 340 C316 356 326 378 324 400 C306 386 292 370 284 354 Z" fill="#2c3855"/>
+    </g>
+
+    <!-- 长发 · 辫 -->
+    <path d="M154 206 C136 266 134 340 148 410 C156 444 172 448 178 426 C164 360 164 284 176 220 Z" fill="#121a2a"/>
+    <path d="M246 206 C264 266 266 340 252 410 C244 444 228 448 222 426 C236 360 236 284 224 220 Z" fill="#121a2a"/>
+    <g fill="none" stroke="#4d5f8c" stroke-width="1.6" opacity=".7">
+      <path d="M156 250 l10 6 l-10 6 l10 6 l-10 6"/>
+      <path d="M244 250 l-10 6 l10 6 l-10 6 l10 6"/>
+    </g>
+
+    <!-- 身形 -->
+    <path d="M112 520 Q106 428 136 356 Q154 314 200 308 Q246 314 264 356 Q294 428 288 520 Z" fill="url(#robe)"/>
+    <path d="M200 308 Q246 314 264 356 Q294 428 288 520 L234 520 Q248 424 224 352 Z" fill="#000" opacity=".18"/>
+    <path d="M168 306 L200 390 L232 306 L216 296 L200 340 L184 296 Z" fill="#0c111c"/>
+    <path d="M200 344 L200 520" stroke="#4d5f8c" stroke-opacity=".45"/>
+    <path d="M124 470 Q200 500 276 470 M118 500 Q200 530 282 500" fill="none" stroke="#9fb4e8" stroke-opacity=".18"/>
+
+    <!-- 羽领 -->
+    <g fill="#1d2740">
+      <path d="M128 352 Q110 366 104 388 Q126 378 144 366 Z"/>
+      <path d="M272 352 Q290 366 296 388 Q274 378 256 366 Z"/>
+      <path d="M144 342 Q126 352 118 370 Q140 362 154 352 Z" fill="#2a3754"/>
+      <path d="M256 342 Q274 352 282 370 Q260 362 246 352 Z" fill="#2a3754"/>
+    </g>
+    <path d="M124 354 Q200 382 276 354" fill="none" stroke="url(#trim)" stroke-opacity=".55"/>
+
+    <!-- 星纹衣带 -->
+    <path d="M146 442 Q200 470 254 442 L256 462 Q200 490 144 462 Z" fill="#1a2236"/>
+    <path d="M146 442 Q200 470 254 442" fill="none" stroke="url(#trim)" stroke-opacity=".6"/>
+    <circle cx="200" cy="454" r="8" fill="#9fb4e8" opacity=".8"/><circle cx="200" cy="454" r="3.4" fill="#0c111c"/>
+
+    <!-- 头颈 -->
+    <path d="M178 286 Q200 298 222 286 L226 314 L174 314 Z" fill="#2a3346"/>
+
+    <!-- 面 -->
+    <!-- 鸦羽兜帽 -->
+    <path d="M150 206 C138 240 144 282 160 306 L176 286 C160 262 154 232 158 206 Z" fill="#0c111c"/>
+    <path d="M250 206 C262 240 256 282 240 306 L224 286 C240 262 246 232 242 206 Z" fill="#0c111c"/>
+    <g fill="#2a3754">
+      <path d="M154 244 L132 226 L148 270 L126 268 L148 296 L140 316 L166 300 Z"/>
+      <path d="M246 244 L268 226 L252 270 L274 268 L252 296 L260 316 L234 300 Z"/>
+    </g>
+    <ellipse cx="200" cy="220" rx="46" ry="52" fill="#aeb8ca"/>
+    <path d="M200 168 Q244 170 248 220 Q250 256 236 274 Q222 288 200 290 Q178 288 164 274 Q150 256 152 220 Q156 170 200 168 Z" fill="#aeb8ca"/>
+    <path d="M152 220 Q158 256 176 276 Q160 246 166 206 Z" fill="#000" opacity=".12"/>
+    <path d="M248 220 Q242 256 224 276 Q240 246 234 206 Z" fill="#000" opacity=".12"/>
+    <path d="M200 168 Q244 170 248 220 Q250 256 236 274 Q222 288 200 290 Q214 256 214 220 Q214 184 200 168 Z" fill="#000" opacity=".08"/>
+
+    <!-- 鸦面半甲 -->
+    <path d="M154 198 Q200 184 246 198 Q246 228 228 242 Q200 252 172 242 Q154 228 154 198 Z" fill="#111827" stroke="#4d5f8c" stroke-opacity=".55"/>
+    <path d="M154 198 Q200 184 246 198" fill="none" stroke="#9fb4e8" stroke-opacity=".45"/>
+    <path d="M160 206 Q200 196 240 206" fill="none" stroke="#7fb6dc" stroke-opacity=".22"/>
+    <path d="M200 198 L206 208 L200 218 L194 208 Z" fill="#8fc4e6" opacity=".65"/>
+    <path d="M200 236 L206 228 L200 220 L194 228 Z" fill="#b3453c" opacity=".6"/>
+
+    <!-- 巫纹 -->
+    <g fill="none" stroke="#8fc4e6" stroke-width="1.8" opacity=".9">
+      <path d="M166 202 l-10 12 l10 12"/>
+      <path d="M234 202 l10 12 l-10 12"/>
+      <path d="M200 184 v12 M194 190 h12"/>
+      <path d="M160 252 l-8 8 M240 252 l8 8"/>
+      <path d="M176 210 l6 6 l-6 6 l6 6"/>
+      <path d="M224 210 l-6 6 l6 6 l-6 6"/>
+    </g>
+    <g fill="none" stroke="#c0503c" stroke-width="1.8" opacity=".8">
+      <path d="M172 256 q-10 10 -4 22 M228 256 q10 10 4 22"/>
+      <path d="M200 260 l5 10 l-5 8"/>
+      <path d="M184 276 q16 8 32 0"/>
+    </g>
+    <path d="M200 238 l3 7 l-3 7 l-3 -7 Z" fill="#b8c6e8" opacity=".85"/>
+
+    <!-- 眼 -->
+    <g class="eye">
+      <path d="M162 222 Q178 208 194 222 Q178 236 162 222 Z" fill="#050810"/>
+      <path d="M238 222 Q222 208 206 222 Q222 236 238 222 Z" fill="#050810"/>
+      <ellipse cx="178" cy="222" rx="5.6" ry="6.4" fill="#a9d6ea" filter="url(#glow)"/>
+      <ellipse cx="178" cy="222" rx="1.8" ry="5.6" fill="#0a1420"/>
+      <circle cx="176" cy="219" r="1.8" fill="#f2fbff"/>
+      <ellipse cx="222" cy="222" rx="5.6" ry="6.4" fill="#a9d6ea" filter="url(#glow)"/>
+      <ellipse cx="222" cy="222" rx="1.8" ry="5.6" fill="#0a1420"/>
+      <circle cx="224" cy="219" r="1.8" fill="#f2fbff"/>
+    </g>
+    <path d="M191 248 Q200 253 209 248" fill="none" stroke="#4a5268" stroke-width="1.6" stroke-linecap="round"/>
+
+    <!-- 鸟骨额饰 -->
+    <g transform="translate(200 170) scale(.82) translate(-200 -180)" opacity=".9">
+      <path d="M200 152 C184 152 176 164 178 178 C179 186 186 192 193 196 L200 210 L207 196 C214 192 221 186 222 178 C224 164 216 152 200 152 Z" fill="url(#bone)" opacity=".95"/>
+      <ellipse cx="188" cy="174" rx="5.4" ry="6.6" fill="#1a2230"/>
+      <ellipse cx="212" cy="174" rx="5.4" ry="6.6" fill="#1a2230"/>
+      <circle cx="188" cy="174" r="2" fill="#7fb6dc" opacity=".6"/>
+      <circle cx="212" cy="174" r="2" fill="#7fb6dc" opacity=".6"/>
+      <path d="M195 192 L200 212 L205 192 Z" fill="#8a8271"/>
+      <path d="M200 196 L200 210" stroke="#6a6454" stroke-width="1.2"/>
+      <path d="M178 162 Q200 148 222 162 Q200 142 178 162 Z" fill="#f0ead8"/>
+      <path d="M184 158 l6 -4 M216 158 l-6 -4" stroke="#b9b29c" stroke-width="1.2"/>
+      <circle cx="200" cy="150" r="3.2" fill="#b3453c" filter="url(#glow)"/>
+    </g>
+
+    <!-- 颈间灵蛇 -->
+    <g fill="none" stroke="#3f8a70" stroke-width="6.4" stroke-linecap="round">
+      <path d="M146 316 C168 338 218 338 244 318 C256 308 254 294 242 290"/>
+    </g>
+    <g transform="translate(242 290)">
+      <ellipse cx="0" cy="0" rx="10" ry="7" fill="#3f8a70"/>
+      <path d="M8 -1 l12 2 l-12 3 Z" fill="#9fc7ab"/>
+      <circle cx="-3" cy="-2" r="1.6" fill="#eaffea"/>
+      <path d="M8 4 l8 6" stroke="#c0503c" stroke-width="1.6" fill="none"/>
+    </g>
+    <g fill="#6f8a5e" opacity=".8">
+      <path d="M150 330 q-16 -6 -26 -18 q18 2 30 12 Z"/>
+      <path d="M250 330 q16 -6 26 -18 q-18 2 -30 12 Z"/>
+      <path d="M154 338 q-10 4 -24 2 q12 6 24 4 Z"/>
+    </g>
+
+    <!-- 左臂 · 托符 -->
+    <path d="M128 394 Q110 428 120 468 Q130 490 150 482 Q142 446 154 412 Z" fill="#1d2740"/>
+    <path d="M112 472 Q100 488 110 504 L146 498 Q134 482 140 466 Z" fill="#2a3346"/>
+    <g transform="translate(118 438) rotate(-10)">
+      <rect width="38" height="52" rx="2" fill="#0c111c" stroke="#9fb4e8" stroke-opacity=".55"/>
+      <g fill="none" stroke="#a9d6ea" stroke-width="1.3">
+        <path d="M8 12 H30 M8 20 H30 M8 28 H24 M8 36 H30"/>
+        <path d="M19 8 v40" stroke-opacity=".3"/>
+      </g>
+      <path d="M8 44 l6 -4 l6 4 l6 -4 l6 4" fill="none" stroke="#b3453c" stroke-width="1.2"/>
+    </g>
+    <!-- 右臂 · 持杖 -->
+    <path d="M272 394 Q292 428 282 468 Q272 492 252 484 Q260 448 248 414 Z" fill="#1d2740"/>
+    <path d="M288 472 Q300 488 290 504 L254 498 Q264 482 258 466 Z" fill="#2a3346"/>
+
+    <!-- 杖 · 药与火 -->
+    <g transform="translate(290 470)">
+      <path d="M0 0 C-6 -84 -4 -148 2 -196" fill="none" stroke="url(#staff)" stroke-width="7" stroke-linecap="round"/>
+      <path d="M-2 -164 C-20 -176 -30 -196 -30 -214" fill="none" stroke="url(#staff)" stroke-width="4" stroke-linecap="round"/>
+      <path d="M2 -182 C18 -194 26 -210 28 -228" fill="none" stroke="url(#staff)" stroke-width="3.4" stroke-linecap="round"/>
+      <path d="M0 -196 l-8 -14 l16 0 Z" fill="#6a5a3c"/>
+      <!-- 葫芦 -->
+      <g transform="translate(0 -206)">
+        <path d="M0 -18 C-12 -14 -14 0 -6 6 C-16 12 -16 28 -4 32 C8 36 18 26 14 14 C12 8 8 6 6 4 C12 0 10 -14 0 -18 Z" fill="#8a6f3c" stroke="#c9a961" stroke-opacity=".5"/>
+        <path d="M-2 -20 q2 -8 6 0" fill="none" stroke="#c9a961" stroke-width="1.4"/>
+      </g>
+      <!-- 蓝焰 -->
+      <g transform="translate(0 -246)"><g class="flame">
+        <ellipse cx="0" cy="14" rx="24" ry="30" fill="url(#flame)"/>
+        <path d="M0 -32 C8 -14 18 0 10 14 C4 24 -8 24 -12 12 C-16 0 -6 -12 0 -32 Z" fill="#a9d6ea" opacity=".8"/>
+        <path d="M0 -18 C4 -8 8 0 4 8 C0 14 -6 12 -7 6 C-8 -2 -3 -10 0 -18 Z" fill="#eaf8ff" opacity=".9"/>
+      </g></g>
+      <g transform="translate(0 -240)"><g class="flame2">
+        <circle cx="-18" cy="4" r="5" fill="#7fb6dc" opacity=".4"/>
+        <circle cx="16" cy="-8" r="4" fill="#a9d6ea" opacity=".5"/>
+        <circle cx="10" cy="20" r="3" fill="#7fb6dc" opacity=".4"/>
+      </g></g>
+      <!-- 蛇 -->
+      <g class="snake" fill="none" stroke="#2f6d5a" stroke-width="6" stroke-linecap="round">
+        <path d="M4 -60 C-18 -72 -28 -96 -16 -116 C-6 -132 12 -128 18 -112"/>
+        <path d="M4 -6 C-16 12 -18 40 -2 54 C12 66 26 54 24 40"/>
+      </g>
+      <g transform="translate(18 -112)"><g class="snakeHead">
+        <ellipse cx="0" cy="0" rx="12" ry="8" fill="#2f6d5a"/>
+        <path d="M8 -2 l12 2 l-12 3 Z" fill="#9fc7ab"/>
+        <circle cx="-2" cy="-2" r="1.8" fill="#eaffea"/>
+      </g></g>
+    </g>
+
+    <!-- 药囊 -->
+    <g transform="translate(160 430)">
+      <path d="M0 0 C-10 10 -10 24 0 30 C10 24 10 10 0 0 Z" fill="#6f8a5e" opacity=".85"/>
+      <path d="M-2 -6 h4 v6 h-4 Z" fill="#c9a961"/>
+    </g>
+    <g transform="translate(238 436) scale(.8)">
+      <path d="M0 0 C-10 10 -10 24 0 30 C10 24 10 10 0 0 Z" fill="#8fae76" opacity=".7"/>
+    </g>
+  </g>
+
+  <!-- 悬浮符简 · 六爻 -->
+  <g class="slip">
+    <g transform="translate(70 182) rotate(-12)">
+      <rect width="26" height="72" rx="2" fill="#0c111c" stroke="#9fb4e8" stroke-opacity=".5"/>
+      <g fill="none" stroke="#a9d6ea" stroke-width="1.2">
+        <path d="M6 14 H20 M6 24 H20 M6 34 H16 M6 44 H20 M6 54 H16"/>
+      </g>
+    </g>
+  </g>
+  <g class="slip s2">
+    <g transform="translate(322 196) rotate(10)" opacity=".8">
+      <rect width="22" height="62" rx="2" fill="#0c111c" stroke="#9fb4e8" stroke-opacity=".4"/>
+      <g fill="none" stroke="#a9d6ea" stroke-width="1" opacity=".8">
+        <path d="M5 12 H17 M5 20 H17 M5 28 H13 M5 36 H17"/>
+      </g>
+    </g>
+  </g>
+  <g class="slip s3">
+    <g transform="translate(54 290) rotate(-6)" opacity=".7">
+      <rect width="20" height="54" rx="2" fill="#0c111c" stroke="#9fb4e8" stroke-opacity=".35"/>
+    </g>
+  </g>
+  <g class="slip s4">
+    <g transform="translate(330 300) rotate(7)" opacity=".65">
+      <rect width="18" height="46" rx="2" fill="#0c111c" stroke="#9fb4e8" stroke-opacity=".35"/>
+    </g>
+  </g>
+
+  <!-- 幽火粒子 -->
+  <g fill="#a9d6ea">
+    <circle class="mote" cx="92" cy="360" r="1.8"/>
+    <circle class="mote" cx="300" cy="356" r="1.4" style="animation-delay:1.3s"/>
+    <circle class="mote" cx="330" cy="250" r="1.2" style="animation-delay:2.4s"/>
+    <circle class="mote" cx="120" cy="300" r="1.2" style="animation-delay:3.4s"/>
+    <circle class="mote" cx="250" cy="330" r="1.6" style="animation-delay:4.2s"/>
+  </g>
+
+  <rect width="400" height="520" fill="url(#vig)"/>
+</svg>

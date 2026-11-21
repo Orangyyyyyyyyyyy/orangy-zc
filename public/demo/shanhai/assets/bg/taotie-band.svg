@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 90" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c9a961" stop-opacity="0"/>
+      <stop offset=".18" stop-color="#c9a961" stop-opacity=".7"/>
+      <stop offset=".5" stop-color="#e8d3a0" stop-opacity=".9"/>
+      <stop offset=".82" stop-color="#c9a961" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#c9a961" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="r" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".4" numOctaves="1" seed="3" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#r)" fill="none" stroke="url(#fade)" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+    <!-- 线 -->
+    <path d="M0 45 H150 M1050 45 H1200" stroke-opacity=".55"/>
+    <path d="M150 45 H210 M990 45 H1050" stroke-dasharray="1 6" stroke-opacity=".5"/>
+
+    <!-- 左 · 云雷纹 -->
+    <g stroke-opacity=".55">
+      <path d="M186 45 h14 v-14 h14 v28 h14 v-28 h14 v14 h14"/>
+      <path d="M240 31 h-14 v28"/>
+      <path d="M280 45 h14 v14 h14 v-42 h14 v20 h14"/>
+      <path d="M330 31 h-14 v14"/>
+      <path d="M380 45 h14 v-20 h14 v40 h14 v-40 h14 v20 h14"/>
+      <path d="M440 31 h-14 v28"/>
+      <path d="M480 45 h14 v-14 h14 v28 h14 v-28 h14 v14 h14"/>
+    </g>
+    <!-- 右 · 云雷纹（镜像） -->
+    <g stroke-opacity=".55" transform="translate(1200,0) scale(-1,1)">
+      <path d="M186 45 h14 v-14 h14 v28 h14 v-28 h14 v14 h14"/>
+      <path d="M240 31 h-14 v28"/>
+      <path d="M280 45 h14 v14 h14 v-42 h14 v20 h14"/>
+      <path d="M330 31 h-14 v14"/>
+      <path d="M380 45 h14 v-20 h14 v40 h14 v-40 h14 v20 h14"/>
+      <path d="M440 31 h-14 v28"/>
+      <path d="M480 45 h14 v-14 h14 v28 h14 v-28 h14 v14 h14"/>
+    </g>
+
+    <!-- 中央 · 饕餮面 -->
+    <g stroke-opacity=".95">
+      <!-- 角 -->
+      <path d="M560 30 C544 16 522 14 508 24 C520 25 530 31 536 40"/>
+      <path d="M640 30 C656 16 678 14 692 24 C680 25 670 31 664 40"/>
+      <!-- 额 -->
+      <path d="M572 36 C584 28 616 28 628 36"/>
+      <path d="M600 28 v-12 M592 22 h16"/>
+      <!-- 目 -->
+      <path d="M556 46 C564 36 580 36 588 46 C580 54 564 54 556 46 Z"/>
+      <circle cx="572" cy="45" r="3.4"/>
+      <path d="M644 46 C636 36 620 36 612 46 C620 54 636 54 644 46 Z"/>
+      <circle cx="628" cy="45" r="3.4"/>
+      <!-- 鼻 -->
+      <path d="M592 56 C596 50 604 50 608 56 L606 64 h-12 Z"/>
+      <!-- 颊 / 獠牙 -->
+      <path d="M548 60 C556 66 564 70 570 72 C562 74 552 72 544 66"/>
+      <path d="M652 60 C644 66 636 70 630 72 C638 74 648 72 656 66"/>
+      <path d="M580 64 C584 72 588 78 588 84 M620 64 C616 72 612 78 612 84" stroke-opacity=".7"/>
+      <!-- 须 -->
+      <path d="M540 52 C524 54 512 60 504 70 M660 52 C676 54 688 60 696 70" stroke-opacity=".55"/>
+    </g>
+    <!-- 分隔菱 -->
+    <path d="M540 45 l4 -4 l4 4 l-4 4 Z M652 45 l4 -4 l4 4 l-4 4 Z" fill="url(#fade)" stroke="none"/>
+  </g>
+</svg>

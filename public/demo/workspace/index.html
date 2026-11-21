@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人工作台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="features-extras.css">
+  <link rel="stylesheet" href="competition.css">
+  <style>
+    :root {
+      --bg: #f6f3ec;
+      --surface: #ffffff;
+      --surface-2: #fbf9f4;
+      --text: #1c1a17;
+      --text-2: #6e685c;
+      --text-3: #8e887c;
+      --gold: #b68a4a;
+      --gold-2: #c79a57;
+      --gold-soft: #efe1d3;
+      --gold-22: rgba(182, 138, 74, 0.22);
+      --border: #e7e2d5;
+      --dark: #16150f;
+      --cream: #f4efea;
+      --green: #2f9e6f;
+      --red: #d9694e;
+      --shadow: 0 2px 14px rgba(28, 26, 23, 0.06);
+      --shadow-lg: 0 10px 30px rgba(28, 26, 23, 0.10);
+      --radius: 14px;
+    }
+    [data-theme="dark"] {
+      --bg: #16150f;
+      --surface: #1f1d16;
+      --surface-2: #26241b;
+      --text: #f4efea;
+      --text-2: #b3a99a;
+      --text-3: #8a8071;
+      --gold: #c79a57;
+      --gold-2: #d8ad68;
+      --gold-soft: #2c2519;
+      --gold-22: rgba(199, 154, 87, 0.22);
+      --border: #322d22;
+      --dark: #0d0c08;
+      --cream: #f4efea;
+      --shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: var(--bg); color: var(--text);
+      -webkit-font-smoothing: antialiased; transition: background .3s, color .3s;
+    }
+    .view { display: none; width: 100%; min-height: 100vh; }
+    .view.active { display: flex; }
+
+    /* ---------- 登录页 ---------- */
+    .login-page { background: var(--dark); align-items: center; justify-content: center; position: relative; overflow: hidden; }
+    .login-frame { position: absolute; inset: 40px; border: 1px solid var(--gold-22); border-radius: 6px; pointer-events: none; }
+    .login-content { display: flex; flex-direction: column; align-items: center; gap: 26px; text-align: center; max-width: 580px; padding: 40px; z-index: 1; }
+    .login-kicker { font-size: 12px; letter-spacing: .22em; color: var(--gold); text-transform: uppercase; }
+    .login-title { font-family: "Noto Serif SC", serif; font-size: 50px; font-weight: 300; line-height: 64px; color: var(--cream); }
+    .login-line { width: 56px; height: 1px; background: var(--gold); }
+    .login-quote { font-family: "Noto Serif SC", serif; font-size: 22px; line-height: 34px; color: var(--cream); }
+    .login-quote-en { font-size: 14px; line-height: 20px; color: var(--text-3); letter-spacing: .02em; }
+    .login-btn { margin-top: 4px; min-width: 180px; height: 56px; padding: 0 34px; border: none; border-radius: 12px; background: var(--gold); color: var(--dark); font-size: 16px; font-weight: 600; cursor: pointer; transition: transform .2s, box-shadow .2s; }
+    .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(182,138,74,.3); }
+
+    /* ---------- 应用布局 ---------- */
+    .app-page { flex-direction: row; height: 100vh; overflow: hidden; }
+    .sidebar { width: 250px; min-width: 250px; height: 100%; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 18px 14px 16px; gap: 6px; overflow-y: auto; scrollbar-width: thin; }
+    .brand { display: flex; align-items: center; gap: 11px; height: 28px; }
+    .brand-icon { width: 26px; height: 26px; color: var(--gold); }
+    .brand-name { font-family: "Noto Serif SC", serif; font-size: 19px; font-weight: 500; color: var(--text); }
+    .nav-list { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+    .nav-item { position: relative; height: 46px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-2); cursor: pointer; transition: background .2s, color .2s; user-select: none; }
+    .nav-item svg { width: 19px; height: 19px; flex-shrink: 0; }
+    .nav-item:hover { background: var(--gold-22); color: var(--text); }
+    .nav-item.active { background: var(--gold-soft); color: var(--text); font-weight: 600; }
+    .nav-item.active::before { content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%); width: 3px; height: 20px; background: var(--gold); border-radius: 2px; }
+    .sidebar-foot { margin-top: 14px; padding: 14px 0 0; font-size: 11px; color: var(--text-3); line-height: 16px; border-top: 1px solid var(--border); }
+
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; overflow: hidden; }
+    .topbar { height: 72px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; flex-shrink: 0; }
+    .topbar-title { font-family: "Noto Serif SC", serif; font-size: 26px; font-weight: 400; line-height: 34px; }
+    .topbar-date { font-size: 13px; color: var(--text-2); }
+    .theme-toggle { width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--gold); font-size: 18px; cursor: pointer; transition: .2s; }
+    .theme-toggle:hover { background: var(--gold-soft); }
+    .content { flex: 1; padding: 32px; overflow-y: auto; }
+    .content-section { display: none; animation: fade .4s ease; }
+    .content-section.active { display: block; }
+    .section-head { font-family: "Noto Serif SC", serif; font-size: 24px; font-weight: 400; margin-bottom: 20px; }
+    @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+    /* ---------- 卡片网格 ---------- */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; display: flex; flex-direction: column; gap: 14px; transition: transform .2s, box-shadow .2s; }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+    .card-title { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 500; }
+    .card-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: var(--text-2); }
+    .card-big { font-family: "Noto Serif SC", serif; font-size: 38px; font-weight: 300; line-height: 1; }
+    .card-sub { font-size: 12px; color: var(--text-3); }
+    .card-points { font-size: 14px; font-weight: 600; color: var(--gold); }
+    .card-quote { font-family: "Noto Serif SC", serif; font-size: 16px; line-height: 26px; color: var(--text-2); }
+
+    /* ---------- 通用按钮 / 表单 ---------- */
+    .btn { height: 44px; padding: 0 22px; border: none; border-radius: 10px; background: var(--text); color: var(--bg); font-size: 14px; font-weight: 500; cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-gold { background: var(--gold); color: var(--dark); }
+    .btn-ghost { background: var(--surface-2); color: var(--text); border: 1px solid var(--border); }
+    .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .input, .select { height: 44px; padding: 0 14px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font-family: inherit; font-size: 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+    .input:focus, .select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-22); }
+    .textarea { width: 100%; min-height: 180px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); color: var(--text); font-family: inherit; font-size: 15px; line-height: 1.7; resize: vertical; outline: none; }
+    .textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-22); }
+
+    /* ---------- 签到 ---------- */
+    .checkin-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 20px; }
+    .checkin-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+    .checkin-status { font-size: 15px; color: var(--text-2); }
+    .checkin-time { font-size: 13px; color: var(--text-3); }
+    .btn-morning { background: linear-gradient(135deg, #f0b35a, #e8923a); color: #3a2400; }
+    .btn-evening { background: linear-gradient(135deg, #8a6fd1, #6a4fb0); color: #fff; }
+
+    /* ---------- 任务 ---------- */
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 18px; }
+    .tasks-list { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow); }
+    .task-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; border-left: 4px solid var(--gold); transition: .2s; }
+    .task-item.done { opacity: .6; border-left-color: var(--green); }
+    .task-item.done .task-text { text-decoration: line-through; }
+    .task-check { display: flex; align-items: center; gap: 12px; flex: 1; cursor: pointer; }
+    .task-check input { width: 18px; height: 18px; accent-color: var(--gold); }
+    .task-text { font-size: 15px; }
+    .task-meta { font-size: 12px; color: var(--text-3); background: var(--gold-soft); padding: 3px 10px; border-radius: 20px; }
+    .task-points { font-size: 13px; font-weight: 700; color: var(--gold); }
+    .pw-empty { padding: 24px; text-align: center; color: var(--text-3); font-size: 14px; }
+
+    /* ---------- 英语 ---------- */
+    .tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .tab-btn { padding: 9px 20px; border: 1px solid var(--border); border-radius: 22px; background: var(--surface-2); color: var(--text-2); font-size: 14px; cursor: pointer; transition: .2s; }
+    .tab-btn.active { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 600; }
+    .english-tab { display: none; }
+    .english-tab.active { display: block; }
+    .vocab-card, .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; }
+    .vocab-word { font-family: "Noto Serif SC", serif; font-size: 40px; font-weight: 400; color: var(--text); text-align: center; margin-bottom: 10px; }
+    .vocab-meaning, .vocab-example { text-align: center; color: var(--text-2); font-size: 17px; margin-bottom: 8px; }
+    .vocab-stat { text-align: center; font-size: 13px; color: var(--text-3); margin-bottom: 18px; }
+    .vocab-controls, .row-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .dictation-box { text-align: center; }
+    .dictation-text { font-size: 18px; color: var(--text-2); margin-bottom: 18px; min-height: 28px; }
+    .dictation-text.hidden-sub { font-style: italic; opacity: .65; }
+    .dictation-input-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
+    .dictation-input-row .input { flex: 1; min-width: 220px; }
+
+    /* ---------- 日记 ---------- */
+    .diary-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+    .emoji-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0; }
+    .emoji-btn { width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); font-size: 19px; cursor: pointer; transition: .15s; }
+    .emoji-btn:hover { background: var(--gold-soft); transform: scale(1.08); }
+    .diary-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap: 12px; margin-top: 12px; }
+    .diary-images img { width: 100%; height: 140px; object-fit: cover; border-radius: 10px; box-shadow: var(--shadow); }
+
+    /* ---------- Music ---------- */
+    .music-head { text-align: center; margin-bottom: 22px; }
+    .music-card { background: var(--surface); border: 1px solid var(--border); border-left: 5px solid var(--gold); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; max-width: 720px; margin: 0 auto; }
+    .music-card h3 { font-family: "Noto Serif SC", serif; font-size: 26px; font-weight: 400; margin-bottom: 6px; }
+    .music-artist { color: var(--gold); font-size: 16px; margin-bottom: 18px; }
+    .music-field { margin-bottom: 16px; }
+    .music-field .label { font-size: 12px; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .music-field .val { font-size: 15px; line-height: 1.7; color: var(--text-2); }
+    .music-mode-tag { display: inline-block; margin-left: 12px; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; vertical-align: middle; transition: background .2s, color .2s; }
+    .music-mode-tag.music-mode-live { background: var(--gold); color: var(--dark); }
+    .music-mode-tag.music-mode-know { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* ---------- 记帐 ---------- */
+    .ledger-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 22px; }
+    .ledger-form .field { display: flex; flex-direction: column; gap: 6px; }
+    .ledger-form label { font-size: 12px; color: var(--text-2); }
+    .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 16px; margin-bottom: 22px; }
+    .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; text-align: center; border-top: 3px solid var(--gold); }
+    .summary-card h4 { font-family: "Noto Serif SC", serif; font-size: 16px; font-weight: 400; margin-bottom: 12px; }
+    .summary-card .line { font-size: 14px; color: var(--text-2); margin-bottom: 6px; }
+    .summary-card .net { font-size: 20px; font-weight: 700; margin-top: 6px; }
+    .income { color: var(--green); }
+    .expense { color: var(--red); }
+    .history { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
+    .history h3 { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 500; margin-bottom: 14px; }
+    .record-item { display: flex; justify-content: space-between; align-items: center; padding: 13px 16px; background: var(--surface-2); border-radius: 10px; border-left: 4px solid var(--gold); margin-bottom: 8px; }
+    .record-item.income { border-left-color: var(--green); }
+    .record-item.expense { border-left-color: var(--red); }
+    .record-details { flex: 1; }
+    .record-details .record-time { font-size: 12px; color: var(--text-3); margin-top: 3px; }
+    .record-amount { font-weight: 700; font-size: 16px; }
+
+    /* ---------- 日历 ---------- */
+    .calendar-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 22px; }
+    .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .cal-header h3 { font-family: "Noto Serif SC", serif; font-size: 20px; font-weight: 400; }
+    .cal-nav { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface-2); color: var(--gold); cursor: pointer; font-size: 16px; }
+    .cal-weekdays, .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+    .cal-weekdays div { text-align: center; font-size: 12px; color: var(--text-3); padding: 6px 0; }
+    .cal-day { aspect-ratio: 1/1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; background: var(--surface-2); transition: .15s; position: relative; font-size: 14px; }
+    .cal-day:hover { background: var(--gold-soft); }
+    .cal-day.other { opacity: .35; }
+    .cal-day.today { background: var(--gold); color: var(--dark); font-weight: 700; }
+    .cal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); position: absolute; bottom: 8px; }
+    .cal-events h3 { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 500; margin-bottom: 14px; }
+    .event-item { display: flex; gap: 12px; align-items: center; padding: 12px 14px; background: var(--surface-2); border-radius: 10px; margin-bottom: 8px; }
+    .event-time { background: var(--gold); color: var(--dark); padding: 4px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; }
+
+    /* ---------- 报表 ---------- */
+    .report-controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .report-output { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; white-space: pre-wrap; line-height: 1.9; font-size: 15px; color: var(--text-2); min-height: 200px; font-family: "Noto Serif SC", serif; }
+
+    /* ---------- 私密空间 ---------- */
+    .private-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; max-width: 560px; margin: 0 auto; }
+    .private-card h3 { font-family: "Noto Serif SC", serif; font-size: 20px; font-weight: 400; margin-bottom: 16px; text-align: center; }
+    .pw-inputs { display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px; }
+    .pw-inputs .input { width: 100%; }
+    .pw-hint { font-size: 13px; color: var(--text-3); text-align: center; margin-bottom: 16px; line-height: 1.6; }
+    .private-content .row-btns { justify-content: flex-end; }
+
+    /* ---------- 设置 ---------- */
+    .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; max-width: 560px; }
+    .settings-row { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 18px; flex-wrap: wrap; }
+    .ai-status { font-size: 13px; color: var(--text-2); margin-bottom: 18px; padding: 12px 14px; background: var(--surface-2); border-radius: 10px; }
+    .ai-status.ok { color: var(--green); background: rgba(47,158,111,.10); }
+    .ai-status.warn { color: var(--red); background: rgba(217,105,78,.10); }
+
+    /* ---------- 仪表板双语鸡汤 ---------- */
+    .card-quote-en { font-family: "Noto Serif SC", serif; font-size: 13px; line-height: 20px; color: var(--text-3); letter-spacing: .02em; margin-top: 10px; }
+
+    /* ---------- 英语单词本统计 ---------- */
+    .section-head-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .section-head-row .section-head { margin-bottom: 0; }
+    .wordbook-box { display: flex; align-items: center; gap: 10px; background: var(--gold-soft); border: 1px solid var(--gold-22); border-radius: 12px; padding: 8px 14px; }
+    .wb-stat { display: flex; flex-direction: column; align-items: center; line-height: 1.1; }
+    .wb-num { font-family: "Noto Serif SC", serif; font-size: 20px; font-weight: 600; color: var(--gold); }
+    .wb-label { font-size: 11px; color: var(--text-2); margin-top: 2px; }
+    .wb-divider { width: 1px; height: 26px; background: var(--gold-22); }
+    .wordbook-list { display: flex; flex-direction: column; gap: 10px; }
+    .wordbook-item { display: flex; align-items: baseline; gap: 12px; padding: 12px 14px; background: var(--surface-2); border-radius: 10px; border-left: 4px solid var(--gold); }
+    .wordbook-item .wb-word { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 500; }
+    .wordbook-item .wb-meaning { font-size: 14px; color: var(--text-2); }
+    .wordbook-item .wb-date { margin-left: auto; font-size: 12px; color: var(--text-3); white-space: nowrap; }
+    .wordbook-empty { padding: 18px; text-align: center; color: var(--text-3); font-size: 14px; }
+
+    /* ---------- 日记富文本 ---------- */
+    .diary-editor { min-height: 220px; max-height: 520px; overflow-y: auto; }
+    .diary-editor:empty:before { content: attr(data-placeholder); color: var(--text-3); }
+    .diary-editor[contenteditable="false"] { background: var(--surface-2); opacity: .85; cursor: not-allowed; }
+    .fmt-toolbar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+    .fmt-btn { width: 38px; height: 38px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); color: var(--text); font-size: 15px; cursor: pointer; transition: .15s; display: inline-flex; align-items: center; justify-content: center; }
+    .fmt-btn:hover { background: var(--gold-soft); }
+    .fmt-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .diary-badge { font-size: 12px; padding: 4px 10px; border-radius: 20px; background: var(--gold-soft); color: var(--gold); font-weight: 600; }
+    .diary-notice { font-size: 13px; padding: 10px 14px; border-radius: 10px; margin-bottom: 12px; background: rgba(217,105,78,.12); color: var(--red); border: 1px solid rgba(217,105,78,.3); }
+    [data-theme="dark"] .diary-notice { background: rgba(217,105,78,.18); }
+    .diary-summary { font-size: 14px; line-height: 1.7; padding: 14px 16px; border-radius: 10px; margin-top: 12px; background: var(--gold-soft); color: var(--text); border: 1px solid rgba(182,138,74,.3); }
+    [data-theme="dark"] .diary-summary { background: rgba(182,138,74,.14); color: var(--cream); }
+
+    /* ---------- 日记语音（转写 + 录音保留） ---------- */
+    .voice-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 12px 0 8px; }
+    .voice-btn { height: 38px; padding: 0 14px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface-2); color: var(--text); font-size: 14px; cursor: pointer; transition: .15s; display: inline-flex; align-items: center; gap: 6px; }
+    .voice-btn:hover { background: var(--gold-soft); }
+    .voice-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .voice-btn.recording { background: var(--red, #d9694e); color: #fff; border-color: transparent; box-shadow: 0 0 0 4px rgba(217,105,78,.18); animation: voicePulse 1.2s ease-in-out infinite; }
+    @keyframes voicePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+    .voice-status { font-size: 13px; color: var(--text-2); min-height: 18px; }
+    .voice-list { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .voice-list-head { font-size: 13px; font-weight: 600; color: var(--text-2); }
+    .voice-item { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); }
+    .voice-item audio { flex: 1; height: 38px; min-width: 180px; }
+    .voice-meta { font-size: 12px; color: var(--text-2); white-space: nowrap; }
+    .voice-del { width: 28px; height: 28px; border: none; border-radius: 50%; background: rgba(217,105,78,.16); color: var(--red, #d9694e); cursor: pointer; font-size: 13px; line-height: 1; transition: .15s; }
+    .voice-del:hover { background: var(--red, #d9694e); color: #fff; }
+
+    /* ---------- 日历交互 / 心情 ---------- */
+    .cal-day.selected { outline: 2px solid var(--gold); outline-offset: -2px; }
+    .cal-mood-emoji { font-size: 16px; line-height: 1; margin-top: 2px; }
+    .cal-day.mood-happy { background: #f7c8d8 !important; color: #7a2a44; }
+    .cal-day.mood-angry { background: #ef9a8f !important; color: #7a2114; }
+    .cal-day.mood-sad { background: #a9c6e8 !important; color: #1f3d63; }
+    .cal-day.mood-calm { background: #b6dcc0 !important; color: #1f5a37; }
+    .cal-day.mood-tired { background: #cfc9bf !important; color: #4a4439; }
+    .cal-day.mood-excited { background: #f6c89a !important; color: #7a4a12; }
+    [data-theme="dark"] .cal-day.mood-happy { background: #6e3349 !important; color: #ffd9e6; }
+    [data-theme="dark"] .cal-day.mood-angry { background: #6e2e23 !important; color: #ffc9bf; }
+    [data-theme="dark"] .cal-day.mood-sad { background: #2e4a6e !important; color: #cfe0f5; }
+    [data-theme="dark"] .cal-day.mood-calm { background: #2e5a40 !important; color: #cdefd9; }
+    [data-theme="dark"] .cal-day.mood-tired { background: #4a4439 !important; color: #e8e2d6; }
+    [data-theme="dark"] .cal-day.mood-excited { background: #6e4a1e !important; color: #ffe4c2; }
+    .cal-detail-actions { display: flex; gap: 10px; margin: 14px 0 6px; flex-wrap: wrap; }
+    .cal-detail-actions .btn { font-size: 13px; padding: 0 16px; height: 40px; }
+    .mood-section { margin-top: 18px; border-top: 1px dashed var(--border); padding-top: 16px; }
+    .mood-label { font-size: 13px; color: var(--text-2); margin-bottom: 10px; }
+    .mood-picker { display: flex; gap: 8px; flex-wrap: wrap; }
+    .mood-btn { width: 44px; height: 44px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); font-size: 20px; cursor: pointer; transition: .15s; display: flex; align-items: center; justify-content: center; }
+    .mood-btn:hover { transform: scale(1.08); }
+    .mood-btn.active { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-22); }
+
+    /* ---------- 设置：AI 连接配置 ---------- */
+    .settings-block { margin-bottom: 6px; }
+    .settings-block-title { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 500; margin-bottom: 6px; }
+    .settings-hint { font-size: 12px; color: var(--text-3); margin-bottom: 16px; line-height: 1.6; }
+    .field-label { font-size: 12px; color: var(--text-2); display: block; margin-bottom: 6px; }
+    .set-val { color: var(--gold); font-weight: 600; margin-left: 6px; }
+    .range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px; background: var(--gold-soft); outline: none; cursor: pointer; }
+    .range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid #fff; box-shadow: var(--shadow); }
+    .range::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid #fff; }
+
+    /* ---------- Toast ---------- */
+    .pw-toast { position: fixed; top: 22px; right: 22px; padding: 14px 20px; border-radius: 12px; color: #fff; font-size: 14px; font-weight: 500; z-index: 9999; background: var(--text); box-shadow: var(--shadow-lg); opacity: 0; transform: translateX(30px); transition: opacity .3s, transform .3s; max-width: 320px; }
+    .pw-toast.show { opacity: 1; transform: none; }
+    .pw-toast.success { background: var(--green); }
+    .pw-toast.error { background: var(--red); }
+    .pw-toast.info { background: var(--gold); color: var(--dark); }
+
+    /* ---------- 响应式 ---------- */
+    @media (max-width: 1024px) { .calendar-card { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .app-page { flex-direction: column; }
+      .sidebar { width: 100%; height: auto; flex-direction: row; padding: 12px; gap: 8px; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--border); position: static; }
+      .brand, .sidebar-foot { display: none; }
+      .nav-list { flex-direction: row; }
+      .nav-item { white-space: nowrap; }
+      .login-title { font-size: 34px; line-height: 44px; }
+      .content { padding: 18px; }
+    }
+  /* ---------- 通用小按钮 / 危险操作 ---------- */
+  .btn-sm { height: 36px; padding: 0 14px; font-size: 13px; }
+  .btn-danger { color: var(--red); border-color: rgba(217,105,78,.4); }
+  .btn-danger:hover { background: rgba(217,105,78,.12); }
+  .pw-empty { padding: 22px; text-align: center; color: var(--text-3); font-size: 14px; }
+
+  /* ---------- 听写专栏（每日热点） ---------- */
+  .dictation-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  .dictation-badge { font-size: 12px; padding: 4px 10px; border-radius: 20px; background: var(--gold-soft); color: var(--gold); font-weight: 600; }
+  .dictation-title { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 500; }
+  .dictation-summary { margin-top: 14px; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; border: 1px solid var(--border); }
+  .dictation-summary .label { font-size: 11px; color: var(--text-3); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+  .dictation-summary .val { font-size: 14px; line-height: 1.7; color: var(--text-2); }
+
+  /* ---------- 稀有度徽章 ---------- */
+  .rarity-badge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 700; vertical-align: middle; }
+  .r-common { background: rgba(142,136,124,.16); color: var(--text-2); }
+  .r-rare { background: rgba(52,152,219,.16); color: #2f86c4; }
+  .r-legendary { background: linear-gradient(135deg, #f0c060, #c79a57); color: #4a3300; }
+  .r-special { background: rgba(199,94,153,.18); color: #c45ba0; }
+  /* 每日新闻检索状态提示 */
+  .news-hint { font-family: "Noto Serif SC", serif; font-size: 15px; color: var(--text); background: var(--gold-soft); border-radius: 10px; padding: 10px 14px; border-left: 3px solid var(--gold); }
+
+
+  /* ---------- 弹窗 ---------- */
+  .pw-modal { position: fixed; inset: 0; background: rgba(20,18,12,.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 9000; padding: 20px; }
+  .pw-modal.open { display: flex; animation: fade .25s ease; }
+  .pw-modal-box { width: 100%; max-width: 640px; max-height: 84vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 24px; }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .modal-head h3 { font-family: "Noto Serif SC", serif; font-size: 19px; font-weight: 500; }
+  .modal-close { border: none; background: var(--surface-2); width: 34px; height: 34px; border-radius: 10px; font-size: 20px; cursor: pointer; color: var(--text-2); line-height: 1; }
+  .modal-close:hover { background: var(--gold-soft); color: var(--gold); }
+
+  /* 单词本管理 */
+  .wb-manage-list { display: flex; flex-direction: column; gap: 10px; }
+  .wb-manage-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--surface-2); border-radius: 12px; border: 1px solid var(--border); }
+  .wb-manage-info { flex: 1; min-width: 0; }
+  .wb-manage-name { font-weight: 600; font-size: 15px; }
+  .wb-manage-meta { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+  .wb-manage-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* 单词查看 */
+  .wb-word-list { display: flex; flex-direction: column; gap: 10px; }
+  .wb-word-row { display: flex; justify-content: space-between; gap: 12px; padding: 12px 14px; background: var(--surface-2); border-radius: 12px; border-left: 4px solid var(--gold); }
+  .wb-word-name { font-family: "Noto Serif SC", serif; font-size: 17px; font-weight: 600; }
+  .wb-word-phon { font-size: 13px; color: var(--gold); margin-left: 8px; }
+  .wb-word-mean { font-size: 14px; color: var(--text-2); margin-top: 3px; }
+  .wb-word-ex { font-size: 13px; color: var(--text-3); font-style: italic; margin-top: 3px; }
+  .wb-word-cat { font-size: 12px; color: var(--text-3); background: var(--gold-soft); padding: 3px 10px; border-radius: 20px; height: fit-content; }
+
+
+  .modal-head-actions { display: flex; align-items: center; gap: 8px; }
+
+  /* 登录自检报表 */
+  .sc-list { display: flex; flex-direction: column; gap: 14px; }
+  .sc-section-title { font-weight: 600; font-size: 14px; color: var(--text-2); margin-bottom: 8px; }
+  .sc-row { display: flex; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--surface-2); border: 1px solid var(--border); }
+  .sc-icon { font-size: 20px; line-height: 1.4; flex-shrink: 0; }
+  .sc-body { flex: 1; min-width: 0; }
+  .sc-name { font-weight: 600; font-size: 14px; }
+  .sc-detail { font-size: 12px; color: var(--text-3); margin-top: 2px; line-height: 1.5; }
+  .sc-ok { border-left: 4px solid #36b37e; }
+  .sc-warn { border-left: 4px solid #ffab00; }
+  .sc-fail { border-left: 4px solid var(--red); }
+  .sc-foot { font-size: 12px; color: var(--text-3); margin-top: 14px; line-height: 1.6; }
+
+
+
+  /* ---------- 英语四级冲刺 ---------- */
+  .c4-badge { font-size: 12px; padding: 4px 12px; border-radius: 20px; font-weight: 600; white-space: nowrap; }
+  .c4-badge.done { background: rgba(47,158,111,.14); color: var(--green); }
+  .c4-badge.todo { background: var(--gold-soft); color: var(--gold); }
+  [data-theme="dark"] .c4-badge.done { background: rgba(47,158,111,.22); }
+
+  /* 单词打卡：主区 + 侧边统计 */
+  .c4-checkin-layout { display: grid; grid-template-columns: 1fr 240px; gap: 20px; margin-bottom: 22px; }
+  .c4-checkin-card { display: flex; flex-direction: column; gap: 14px; }
+  .c4-checkin-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .c4-checkin-title { font-family: "Noto Serif SC", serif; font-size: 18px; font-weight: 500; }
+  .c4-checkin-preview { min-height: 180px; border-radius: 12px; background: var(--surface-2); border: 1px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+  .c4-checkin-preview img { width: 100%; max-height: 360px; object-fit: contain; background: var(--surface-2); }
+  .c4-checkin-time { font-size: 12px; color: var(--text-3); padding: 8px 14px; width: 100%; text-align: center; }
+  .c4-checkin-empty { text-align: center; padding: 30px 20px; }
+  .c4-checkin-empty p { margin-bottom: 6px; color: var(--text-2); }
+  .c4-upload-icon { font-size: 44px; margin-bottom: 10px; }
+  .c4-checkin-actions { display: flex; gap: 10px; }
+  .c4-checkin-side { display: flex; flex-direction: column; gap: 16px; }
+  .c4-stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 18px; text-align: center; border-top: 4px solid var(--gold); }
+  .c4-stat-card.streak { border-top-color: #e8923a; background: linear-gradient(180deg, rgba(232,146,58,.06), var(--surface) 60%); }
+  .c4-stat-card.total { border-top-color: var(--green); }
+  .c4-stat-num { font-family: "Noto Serif SC", serif; font-size: 44px; font-weight: 300; line-height: 1; color: var(--text); margin-bottom: 8px; }
+  .c4-stat-card.streak .c4-stat-num { color: #e8923a; }
+  .c4-stat-card.total .c4-stat-num { color: var(--green); }
+  .c4-stat-label { font-size: 13px; color: var(--text-2); }
+
+  /* 打卡墙 */
+  .c4-wall-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+  .c4-wall-title { font-family: "Noto Serif SC", serif; font-size: 16px; font-weight: 500; margin-bottom: 16px; }
+  .c4-wall { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; }
+  .c4-wall-day { position: relative; text-align: center; }
+  .c4-wall-img { aspect-ratio: 1/1; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; transition: .2s; }
+  .c4-wall-img img { width: 100%; height: 100%; object-fit: cover; }
+  .c4-wall-empty { font-size: 22px; color: var(--text-3); }
+  .c4-wall-label { font-size: 11px; color: var(--text-3); margin-top: 6px; }
+  .c4-wall-day.today .c4-wall-img { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-22); }
+  .c4-wall-day.today .c4-wall-label { color: var(--gold); font-weight: 600; }
+  .c4-wall-day.done .c4-wall-img { border-color: var(--green); }
+  .c4-wall-check { position: absolute; top: -4px; right: -4px; width: 20px; height: 20px; border-radius: 50%; background: var(--green); color: #fff; font-size: 11px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); }
+
+  /* 考试介绍：概览数字 */
+  .c4-exam-overview { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 22px; }
+  .c4-overview-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 14px; text-align: center; border-bottom: 3px solid var(--gold); }
+  .c4-ov-num { font-family: "Noto Serif SC", serif; font-size: 36px; font-weight: 300; line-height: 1; color: var(--gold); }
+  .c4-ov-unit { font-size: 14px; color: var(--text-2); margin-left: 2px; }
+  .c4-ov-label { font-size: 13px; color: var(--text-2); margin-top: 8px; }
+
+  /* 题型表格 */
+  .c4-struct-card { margin-bottom: 20px; }
+  .c4-table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  .c4-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 640px; }
+  .c4-table th, .c4-table td { padding: 11px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  .c4-table thead th { background: var(--gold-soft); color: var(--text); font-weight: 600; white-space: nowrap; }
+  .c4-table tbody tr:hover { background: var(--surface-2); }
+  .c4-table tbody tr:nth-child(odd) { background: var(--surface-2); }
+  .c4-table tbody tr:nth-child(odd):hover { background: var(--gold-soft); }
+  .c4-table tfoot td { background: var(--gold-soft); font-weight: 600; border-bottom: none; }
+  [data-theme="dark"] .c4-table tbody tr:nth-child(odd) { background: var(--surface-2); }
+
+  /* 考试流程时间轴 */
+  .c4-flow-card { margin-bottom: 20px; }
+  .c4-flow { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 8px; }
+  .c4-flow-item { display: flex; gap: 16px; position: relative; padding-bottom: 22px; }
+  .c4-flow-item:last-child { padding-bottom: 0; }
+  .c4-flow-item::before { content: ""; position: absolute; left: 19px; top: 40px; bottom: -4px; width: 2px; background: var(--border); }
+  .c4-flow-item:last-child::before { display: none; }
+  .c4-flow-icon { width: 40px; height: 40px; min-width: 40px; border-radius: 50%; background: var(--gold-soft); border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 18px; z-index: 1; }
+  .c4-flow-body { flex: 1; padding-top: 2px; }
+  .c4-flow-time { font-size: 12px; color: var(--gold); font-weight: 600; letter-spacing: .02em; margin-bottom: 3px; }
+  .c4-flow-title { font-family: "Noto Serif SC", serif; font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+  .c4-flow-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; }
+
+  /* 备考提示 */
+  .c4-tips { margin-top: 22px; padding: 18px 20px; background: var(--gold-soft); border-radius: 12px; border: 1px solid rgba(182,138,74,.28); }
+  [data-theme="dark"] .c4-tips { background: rgba(182,138,74,.12); }
+  .c4-tips-title { font-family: "Noto Serif SC", serif; font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+  .c4-tips ul { list-style: none; padding: 0; }
+  .c4-tips li { font-size: 13px; color: var(--text-2); line-height: 1.9; padding-left: 18px; position: relative; }
+  .c4-tips li::before { content: "▸"; position: absolute; left: 0; color: var(--gold); }
+  .c4-tips strong { color: var(--text); }
+
+  /* 每日记录 */
+  .c4-record-card { margin-bottom: 22px; }
+  .c4-record-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+  .c4-record-section { margin-bottom: 20px; }
+  .c4-record-label { font-family: "Noto Serif SC", serif; font-size: 15px; font-weight: 500; margin-bottom: 10px; }
+  .c4-record-text { min-height: 140px; }
+  .c4-rec-images { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .c4-rec-img { position: relative; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+  .c4-rec-img img { width: 100%; height: 130px; object-fit: cover; display: block; }
+  .c4-rec-img-del { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border: none; border-radius: 50%; background: rgba(0,0,0,.55); color: #fff; font-size: 14px; cursor: pointer; line-height: 1; transition: .15s; }
+  .c4-rec-img-del:hover { background: var(--red); }
+
+  /* emoji 心得选择器 */
+  .c4-emoji-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+  .c4-emoji-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-2); cursor: pointer; transition: .15s; }
+  .c4-emoji-btn:hover:not(:disabled) { background: var(--gold-soft); transform: translateY(-2px); }
+  .c4-emoji-btn.active { border-color: var(--gold); background: var(--gold-soft); box-shadow: 0 0 0 3px var(--gold-22); }
+  .c4-emoji-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .c4-emoji-icon { font-size: 26px; line-height: 1; }
+  .c4-emoji-label { font-size: 11px; color: var(--text-2); }
+  .c4-emoji-current { margin-top: 14px; padding: 10px 14px; background: var(--gold-soft); border-radius: 10px; font-size: 14px; color: var(--text-2); display: inline-flex; align-items: center; gap: 8px; }
+  .c4-emoji-big { font-size: 24px; }
+  .c4-record-actions { display: flex; gap: 10px; }
+
+  /* 记录历史 */
+  .c4-record-history { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px; }
+  .c4-history-list { display: flex; flex-direction: column; gap: 10px; }
+  .c4-history-item { display: flex; gap: 14px; padding: 14px 16px; background: var(--surface-2); border-radius: 10px; border-left: 4px solid var(--gold); cursor: pointer; transition: .2s; }
+  .c4-history-item:hover { transform: translateX(4px); box-shadow: var(--shadow); background: var(--gold-soft); }
+  .c4-history-emoji { font-size: 32px; line-height: 1; flex-shrink: 0; }
+  .c4-history-body { flex: 1; min-width: 0; }
+  .c4-history-date { font-family: "Noto Serif SC", serif; font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+  .c4-history-preview { font-size: 13px; color: var(--text-2); line-height: 1.5; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .c4-history-meta { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+
+  @media (max-width: 900px) {
+    .c4-checkin-layout { grid-template-columns: 1fr; }
+    .c4-exam-overview { grid-template-columns: repeat(2, 1fr); }
+    .c4-wall { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .c4-wall { grid-template-columns: repeat(3, 1fr); }
+    .c4-emoji-picker { grid-template-columns: repeat(3, 1fr); }
+  }
+
+</style>
+</head>
+<body>
+
+  <!-- ============ 登录页 ============ -->
+  <div id="login-view" class="view login-page active">
+    <div class="login-frame"></div>
+    <div class="login-content">
+      <div class="login-kicker">Personal Workspace</div>
+      <h1 class="login-title">欢迎来到个人工作台</h1>
+      <div class="login-line"></div>
+      <p class="login-quote" id="motivation-text">把每一天，过成值得收藏的作品。</p>
+      <p class="login-quote-en" id="motivation-en">Make each day a piece worth keeping.</p>
+      <button class="login-btn" onclick="enterApp()">进入工作台 →</button>
+    </div>
+  </div>
+
+  <!-- ============ 登录加载遮罩 ============ -->
+  <div id="login-loading" class="login-loading" aria-hidden="true">
+    <div class="loading-card">
+      <div class="loading-kicker">Personal Workspace</div>
+      <h2 class="loading-title">正在为你准备工作台</h2>
+      <div class="loading-bar"><span id="loading-bar-fill"></span></div>
+      <ul class="loading-stages">
+        <li class="load-stage pending" data-stage="ai">
+          <span class="stage-icon"></span>
+          <span class="stage-main"><span class="stage-label">启动 AI 引擎</span><span class="stage-status">等待中…</span></span>
+        </li>
+        <li class="load-stage pending" data-stage="home">
+          <span class="stage-icon"></span>
+          <span class="stage-main"><span class="stage-label">生成首页内容（心灵鸡汤 · 今日新闻）</span><span class="stage-status">等待中…</span></span>
+        </li>
+        <li class="load-stage pending" data-stage="english">
+          <span class="stage-icon"></span>
+          <span class="stage-main"><span class="stage-label">生成英语学习内容</span><span class="stage-status">等待中…</span></span>
+        </li>
+        <li class="load-stage pending" data-stage="market">
+          <span class="stage-icon"></span>
+          <span class="stage-main"><span class="stage-label">生成行情关注</span><span class="stage-status">等待中…</span></span>
+        </li>
+      </ul>
+      <div class="loading-foot">首次生成稍慢，生成后本地缓存，后续秒开</div>
+    </div>
+  </div>
+
+  <!-- ============ 应用主框架 ============ -->
+  <div id="app-view" class="view app-page">
+    <aside class="sidebar">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7.5C5 6.67 5.67 6 6.5 6H15.5L19 9.5V16.5C19 17.33 18.33 18 17.5 18H6.5C5.67 18 5 17.33 5 16.5V7.5Z"/><path d="M15 6V9.5H19"/><path d="M9 14H15"/></svg>
+        <span class="brand-name">个人工作台</span>
+      </div>
+      <ul class="nav-list">
+        <li class="nav-item active" data-page="dashboard" onclick="switchPage('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>仪表板</span>
+        </li>
+        <li class="nav-item" data-page="checkin" onclick="switchPage('checkin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg><span>签到打卡</span>
+        </li>
+        <li class="nav-item" data-page="tasks" onclick="switchPage('tasks')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg><span>每日任务</span>
+        </li>
+        <li class="nav-item" data-page="english" onclick="switchPage('english')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M4 5v14M4 19h7"/><path d="M13 5h7M15 5v14M13 19h7"/><path d="M9 9h2M9 13h2"/></svg><span>英语学习</span>
+        </li>
+        <li class="nav-item" data-page="collect" onclick="switchPage('collect')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/><path d="M8.5 11h5M11 8.5v5"/></svg><span>信息搜集</span>
+        </li>
+        <li class="nav-item" data-page="convert" onclick="switchPage('convert')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h11l-3-3M20 17H9l3 3"/></svg><span>文件转换</span>
+        </li>
+        <li class="nav-item" data-page="cet4" onclick="switchPage('cet4')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg><span>四级冲刺</span>
+        </li>
+        <li class="nav-item" data-page="comp" onclick="switchPage('comp')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9h4v11H6z"/><path d="M14 5h4v15h-4z"/><path d="M6 5h12"/><path d="M4 20h16"/><path d="M12 5l2.2 3.2L17 9.4l-2.8 2.2.8 3.4L12 13.2 8.9 15l.8-3.4L7 9.4l2.9-1.2z"/></svg><span>竞赛时间表</span>
+        </li>
+        <li class="nav-item" data-page="cert" onclick="switchPage('cert')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M7 8h6M7 12h4"/><path d="M16.5 8.5h.01"/><circle cx="17" cy="19" r="3"/><path d="M18.4 21.2l1.6 1.8"/></svg><span>证书规划</span>
+        </li>
+        <li class="nav-item" data-page="diary" onclick="switchPage('diary')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13l3 3v13H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span>每日日记</span>
+        </li>
+        <li class="nav-item" data-page="music" onclick="switchPage('music')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/></svg><span>Music 专区</span>
+        </li>
+        <li class="nav-item" data-page="ledger" onclick="switchPage('ledger')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><span>记帐本</span>
+        </li>
+        <li class="nav-item" data-page="calendar" onclick="switchPage('calendar')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg><span>日历</span>
+        </li>
+        <li class="nav-item" data-page="reports" onclick="switchPage('reports')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="M8 16l4-5 3 3 4-6"/></svg><span>报表</span>
+        </li>
+        <li class="nav-item" data-page="private" onclick="switchPage('private')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>私密空间</span>
+        </li>
+        <li class="nav-item" data-page="wishes" onclick="switchPage('wishes')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 5.3L20 9.2l-4 4 1 6-5-3-5 3 1-6-4-4 5.6-.9z"/></svg><span>个人愿望</span>
+        </li>
+        <li class="nav-item" data-page="links" onclick="switchPage('links')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a4 4 0 0 0 5.7.4l2.6-2.6a4 4 0 0 0-5.7-5.7L11 6.3"/><path d="M14 11a4 4 0 0 0-5.7-.4L5.7 13.2a4 4 0 0 0 5.7 5.7L13 17.7"/></svg><span>网址清单</span>
+        </li>
+        <li class="nav-item" data-page="market" onclick="switchPage('market')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7 15l3-4 3 3 4-7"/></svg><span>行情关注</span>
+        </li>
+        <li class="nav-item" data-page="settings" onclick="switchPage('settings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg><span>设置</span>
+        </li>
+      </ul>
+      <div class="sidebar-foot">AI 优先 · 本地辅助<br>智谱实时驱动 · 数据本地留存</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 class="topbar-title" id="page-title">仪表板</h2>
+          <span class="topbar-date" id="current-date"></span>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" title="切换深浅色">☾</button>
+      </header>
+
+      <div class="content">
+
+        <!-- 仪表板 -->
+        <section id="dashboard-section" class="content-section active">
+          <h2 class="section-head">今日概览</h2>
+          <div class="card-grid">
+            <div class="card">
+              <h3 class="card-title">签到状态</h3>
+              <div class="card-row"><span>🌞 早上</span><span id="dash-morning">未签到</span></div>
+              <div class="card-row"><span>🌙 晚上</span><span id="dash-evening">未签到</span></div>
+              <div class="card-row"><span>🔥 连续打卡</span><span id="dash-streak">0 天</span></div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">任务进度</h3>
+              <div class="card-big"><span id="dash-tasks-done">0</span> / <span id="dash-tasks-total">0</span></div>
+              <div class="card-sub">已完成 / 总任务</div>
+              <div class="card-points">积分 <span id="dash-points">0</span></div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">今日天气</h3>
+              <div class="card-big" id="dash-temp">--°C</div>
+              <div class="card-sub" id="dash-weather">加载中…</div>
+            </div>
+            <div class="card">
+              <h3 class="card-title">心灵鸡汤</h3>
+              <p class="card-quote" id="dash-motivation">—</p>
+              <p class="card-quote-en" id="dash-motivation-en">—</p>
+            </div>
+          </div>
+
+        <!-- 每日新闻推送 -->
+        <div class="section-head-row" style="margin-top:32px">
+          <h2 class="section-head">每日新闻 · 国内 / 国外</h2>
+          <div class="wordbook-box" style="margin-left:auto">
+            <button class="btn btn-gold btn-sm" onclick="refreshNews()">🔄 刷新新闻</button>
+          </div>
+        </div>
+        <div id="news-zone" class="news-zone">
+          <div class="news-hint">正在检索今日新闻…</div>
+        </div>
+
+        </section>
+
+        <!-- 签到 -->
+        <section id="checkin-section" class="content-section">
+          <h2 class="section-head">每日签到打卡</h2>
+          <div class="checkin-wrap">
+            <div class="checkin-card">
+              <h3 class="card-title">🌞 早上签到</h3>
+              <div class="checkin-status" id="checkin-morning-status">未签到</div>
+              <div class="checkin-time" id="checkin-morning-time"></div>
+              <button class="btn btn-morning" onclick="morningCheckin()">早上打卡</button>
+            </div>
+            <div class="checkin-card">
+              <h3 class="card-title">🌙 晚上签到</h3>
+              <div class="checkin-status" id="checkin-evening-status">未签到</div>
+              <div class="checkin-time" id="checkin-evening-time"></div>
+              <button class="btn btn-evening" onclick="eveningCheckin()">晚上打卡</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 任务 -->
+        <section id="tasks-section" class="content-section">
+          <h2 class="section-head">每日任务清单</h2>
+          <div class="toolbar">
+            <button class="btn btn-gold" onclick="loadDefaultPlan()">＋ 载入内置每日规划</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('file-plan').click()">⬆ 上传 Excel / CSV</button>
+            <span class="card-points">累计积分：<span id="task-points">0</span></span>
+            <input type="file" id="file-plan" accept=".xlsx,.xls,.csv" style="display:none" onchange="if(this.files[0])uploadPlan(this.files[0])">
+          </div>
+          <div class="tasks-list" id="tasks-list"></div>
+        </section>
+
+        <!-- 英语 -->
+        <section id="english-section" class="content-section">
+          <div class="section-head-row">
+            <h2 class="section-head">英语学习专栏</h2>
+            <div class="wordbook-box" id="wordbook-box" title="单词本统计">
+              <div class="wb-stat"><span class="wb-num" id="wb-today">0</span><span class="wb-label">今日学习单词</span></div>
+              <div class="wb-divider"></div>
+              <div class="wb-stat"><span class="wb-num" id="wb-total">0</span><span class="wb-label">累计学习单词</span></div>
+            </div>
+          </div>
+          <div class="toolbar" style="margin-bottom:14px;gap:10px;flex-wrap:wrap">
+            <label class="field-label" style="margin:0 4px 0 0">今日背诵词本</label>
+            <select id="wb-today-select" class="select" onchange="pwSelectTodayBook()"></select>
+            <button class="btn btn-gold" onclick="pwNewWordbook()">＋ 新建词本</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('wb-file').click()">⬆ 上传词本（AI 加工）</button>
+            <input type="file" id="wb-file" accept=".txt,.csv,.xlsx,.xls" style="display:none" onchange="if(this.files[0])pwUploadWordbook(this.files[0]);this.value=''">
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchEnglishTab('vocab-tab', this)">单词记忆</button>
+            <button class="tab-btn" onclick="switchEnglishTab('dictation-tab', this)">听写专栏</button>
+            <button class="tab-btn" onclick="switchEnglishTab('wordbook-tab', this)">单词本管理</button>
+          </div>
+          <div id="vocab-tab" class="english-tab active">
+            <div class="vocab-card">
+              <div class="vocab-word" id="vocab-word">Perseverance</div>
+              <div class="vocab-meaning" id="vocab-meaning">毅力，坚持不懈</div>
+              <div class="vocab-example" id="vocab-example">Perseverance is the key to success.</div>
+              <div class="vocab-stat" id="vocab-stat"></div>
+              <div class="vocab-controls">
+                <button class="btn btn-ghost" onclick="newVocab()">🔄 换一个</button>
+                <button class="btn btn-gold" onclick="markVocab('known')">认识 ✓</button>
+                <button class="btn btn-ghost" onclick="markVocab('unknown')">不认识 ✗</button>
+              </div>
+            </div>
+          </div>
+          <div id="dictation-tab" class="english-tab">
+            <div class="vocab-card dictation-box">
+              <div class="dictation-text" id="dictation-text">点击「播放」开始听写</div>
+              <div class="dictation-input-row">
+                <input class="input" id="dictation-input" placeholder="输入你听到的内容">
+                <button class="btn btn-gold" onclick="checkDictation()">检查</button>
+              </div>
+              <div class="vocab-controls" style="margin-top:18px">
+                <button class="btn btn-ghost" onclick="playDictation()">🔊 播放</button>
+                <button class="btn btn-ghost" onclick="newDictation()">🔄 换一句</button>
+              </div>
+            </div>
+          </div>
+          <div id="wordbook-tab" class="english-tab">
+            <div class="vocab-card">
+              <h3 class="card-title">我的单词本</h3>
+              <p class="card-sub" style="margin-bottom:16px">记忆时选择「不认识」的单词会自动收进这里，方便日后复习。</p>
+              <div class="wordbook-list" id="wordbook-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 英语四级冲刺 -->
+        <section id="cet4-section" class="content-section">
+          <div class="section-head-row">
+            <h2 class="section-head">英语四级冲刺</h2>
+            <span class="card-sub">CET-4 · 单词打卡 / 考试介绍 / 每日记录</span>
+          </div>
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchCet4Tab('cet4-checkin', this)">📚 单词打卡</button>
+            <button class="tab-btn" onclick="switchCet4Tab('cet4-exam', this)">📋 考试介绍</button>
+            <button class="tab-btn" onclick="switchCet4Tab('cet4-record', this)">📔 每日记录</button>
+          </div>
+          <div id="cet4-checkin" class="english-tab active"><!-- 单词打卡：由 features-cet4.js 渲染 --></div>
+          <div id="cet4-exam" class="english-tab"><!-- 考试介绍：由 features-cet4.js 渲染 --></div>
+          <div id="cet4-record" class="english-tab"><!-- 每日记录：由 features-cet4.js 渲染 --></div>
+        </section>
+
+        <!-- 竞赛时间表 -->
+        <section id="comp-section" class="content-section">
+          <div id="comp-mount"><!-- 由 competition.js 渲染 --></div>
+        </section>
+
+        <!-- 证书规划 -->
+        <section id="cert-section" class="content-section">
+          <div id="cert-mount"><!-- 由 competition.js 渲染 --></div>
+        </section>
+
+        <!-- 日记 -->
+        <section id="diary-section" class="content-section">
+          <h2 class="section-head">每日日记</h2>
+          <div class="panel">
+            <div class="diary-toolbar">
+              <input type="date" class="input" id="diary-date" onchange="loadDiary()">
+              <span class="diary-badge" id="diary-badge"></span>
+              <button class="btn btn-gold" id="btn-save-diary" onclick="saveDiary()">💾 保存日记</button>
+              <button class="btn btn-ghost" id="btn-summarize-diary" onclick="summarizeDiary()">✨ AI 智能总结</button>
+            </div>
+            <div class="diary-notice" id="diary-notice" style="display:none"></div>
+            <div class="fmt-toolbar" id="fmt-toolbar">
+              <button class="fmt-btn" type="button" onclick="formatDiary('bold')" title="加粗"><b>B</b></button>
+              <button class="fmt-btn" type="button" onclick="formatDiary('italic')" title="斜体"><i>I</i></button>
+              <button class="fmt-btn" type="button" onclick="formatDiary('underline')" title="下划线"><u>U</u></button>
+              <button class="fmt-btn" type="button" onclick="formatDiary('strikeThrough')" title="删除线"><s>S</s></button>
+              <button class="fmt-btn" type="button" onclick="insertHr()" title="画横线">―</button>
+              <button class="fmt-btn" type="button" onclick="formatDiary('enlarge')" title="放大字号"><span style="font-size:18px">A</span>+</button>
+            </div>
+            <div class="voice-bar" id="voice-bar">
+              <button class="voice-btn" id="btn-dictate" type="button" onclick="toggleDictate()" title="语音转文字（按住说话，自动插入日记）">🎙️ 语音转写</button>
+              <button class="voice-btn" id="btn-record" type="button" onclick="toggleRecord()" title="录一段语音，保存为可回放的语音备忘">🔴 录制语音</button>
+              <span class="voice-status" id="voice-status"></span>
+            </div>
+            <div class="textarea diary-editor" id="diary-editor" contenteditable="true" data-placeholder="记录今天的点滴…"></div>
+            <div class="diary-summary" id="diary-summary" style="display:none"></div>
+            <div class="emoji-row">
+              <button class="emoji-btn" type="button" onclick="insertEmoji('😊')">😊</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('😢')">😢</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('😍')">😍</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('🤔')">🤔</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('😎')">😎</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('🌟')">🌟</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('💡')">💡</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('🌈')">🌈</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('☕')">☕</button>
+              <button class="emoji-btn" type="button" onclick="insertEmoji('📚')">📚</button>
+              <button class="emoji-btn" type="button" onclick="document.getElementById('file-diary').click()">🖼️</button>
+            </div>
+            <div class="diary-images" id="diary-images"></div>
+            <div class="voice-list" id="voice-list"></div>
+            <input type="file" id="file-diary" accept="image/*" style="display:none" onchange="if(this.files[0])uploadDiaryImage(this.files[0]);this.value=''">
+          </div>
+        </section>
+
+        <!-- Music -->
+        <section id="music-section" class="content-section">
+          <h2 class="section-head">Music 专区</h2>
+          <div class="music-head">
+            <button class="btn btn-gold" id="btn-music" onclick="renderMusic()">🎵 获取 AI 歌曲推荐</button>
+            <span id="music-mode" class="music-mode-tag" style="display:none"></span>
+          </div>
+          <div class="music-card">
+            <h3 id="music-name">点击获取推荐</h3>
+            <div class="music-artist" id="music-artist">—</div>
+            <div class="music-field"><div class="label">作曲 / 创作背景</div><div class="val" id="music-bg">—</div></div>
+            <div class="music-field"><div class="label">AI 评价</div><div class="val" id="music-review">—</div></div>
+          </div>
+        </section>
+
+        <!-- 记帐 -->
+        <section id="ledger-section" class="content-section">
+          <h2 class="section-head">记帐本</h2>
+          <div class="ledger-form">
+            <div class="field">
+              <label>类型</label>
+              <select class="select" id="ledger-type"><option value="expense">支出</option><option value="income">收入</option></select>
+            </div>
+            <div class="field">
+              <label>金额</label>
+              <input class="input" type="number" step="0.01" id="ledger-amount" placeholder="0.00">
+            </div>
+            <div class="field" style="flex:1;min-width:200px">
+              <label>描述</label>
+              <input class="input" type="text" id="ledger-desc" placeholder="记录描述">
+            </div>
+            <button class="btn btn-gold" onclick="addLedger()">添加记录</button>
+          </div>
+          <div class="summary-grid">
+            <div class="summary-card"><h4>今日</h4><div class="line">收入 <span class="income" id="sum-today-income">¥0.00</span></div><div class="line">支出 <span class="expense" id="sum-today-expense">¥0.00</span></div><div class="net" id="sum-today-net">¥0.00</div></div>
+            <div class="summary-card"><h4>本月</h4><div class="line">收入 <span class="income" id="sum-month-income">¥0.00</span></div><div class="line">支出 <span class="expense" id="sum-month-expense">¥0.00</span></div><div class="net" id="sum-month-net">¥0.00</div></div>
+            <div class="summary-card"><h4>本年</h4><div class="line">收入 <span class="income" id="sum-year-income">¥0.00</span></div><div class="line">支出 <span class="expense" id="sum-year-expense">¥0.00</span></div><div class="net" id="sum-year-net">¥0.00</div></div>
+          </div>
+          <div class="history">
+            <div class="ledger-toolbar">
+              <div class="ledger-filters">
+                <button class="filter-btn active" type="button" data-f="all" onclick="ledgerSetFilter('all')">全部</button>
+                <button class="filter-btn" type="button" data-f="income" onclick="ledgerSetFilter('income')">收入</button>
+                <button class="filter-btn" type="button" data-f="expense" onclick="ledgerSetFilter('expense')">支出</button>
+              </div>
+              <input class="input ledger-search" type="text" id="ledger-search" placeholder="搜索描述…" oninput="ledgerSearchInput(this.value)">
+              <div class="ledger-daterange">
+                <input class="input ledger-date" type="date" id="ledger-date-from" onchange="ledgerSetDateRange()" title="起始日期">
+                <span class="date-sep">至</span>
+                <input class="input ledger-date" type="date" id="ledger-date-to" onchange="ledgerSetDateRange()" title="结束日期">
+                <button class="btn btn-ghost btn-sm" type="button" onclick="ledgerClearDateRange()">清除日期</button>
+              </div>
+              <div class="ledger-actions">
+                <button class="btn btn-gold" type="button" onclick="exportLedgerExcel()">📊 导出 Excel</button>
+                <button class="btn btn-ghost" type="button" onclick="exportLedger()">⬇ 导出 JSON</button>
+                <button class="btn btn-ghost" type="button" onclick="document.getElementById('ledger-import-file').click()">⬆ 导入记录</button>
+                <button class="btn btn-ghost" type="button" onclick="recoverLedger()">🔄 找回旧记录</button>
+              </div>
+            </div>
+            <h3 id="ledger-history-title">全部记录</h3>
+            <div id="ledger-history"></div>
+            <div id="ledger-pager" class="ledger-pager"></div>
+            <input type="file" id="ledger-import-file" accept="application/json,.json" style="display:none" onchange="importLedgerFromFile(this)">
+          </div>
+        </section>
+
+        <!-- 日历 -->
+        <section id="calendar-section" class="content-section">
+          <h2 class="section-head">日历与行程</h2>
+          <div class="calendar-card">
+            <div>
+              <div class="cal-header">
+                <button class="cal-nav" id="btn-cal-prev" onclick="prevMonth()">‹</button>
+                <h3 id="cal-month">2026年7月</h3>
+                <button class="cal-nav" id="btn-cal-next" onclick="nextMonth()">›</button>
+              </div>
+              <div class="cal-weekdays"><div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div></div>
+              <div class="cal-grid" id="cal-grid"></div>
+            </div>
+            <div class="cal-events">
+              <h3 id="cal-detail-title">今日行程</h3>
+              <div id="cal-events"></div>
+              <div class="cal-detail-actions">
+                <button class="btn btn-ghost" id="btn-add-event" onclick="addEventForSelected()">＋ 添加行程</button>
+                <button class="btn btn-ghost" id="btn-open-diary" onclick="openDiaryForSelected()">📝 当日日记</button>
+              </div>
+              <div class="mood-section">
+                <div class="mood-label" id="mood-label">今日心情</div>
+                <div class="mood-picker" id="mood-picker"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 报表 -->
+        <section id="reports-section" class="content-section">
+          <h2 class="section-head">日报 / 周报 / 月报</h2>
+          <div class="report-controls">
+            <button class="btn btn-gold" onclick="generateReport('daily')">📄 生成日报</button>
+            <button class="btn btn-ghost" onclick="generateReport('weekly')">📄 生成周报</button>
+            <button class="btn btn-ghost" onclick="generateReport('monthly')">📄 生成月报</button>
+          </div>
+          <div class="report-output" id="report-output">点击上方按钮，AI 将基于你的打卡、任务、记帐与日记生成总结。</div>
+        </section>
+
+        <!-- 私密空间 -->
+        <section id="private-section" class="content-section">
+          <h2 class="section-head">私密空间</h2>
+          <div class="private-card">
+            <!-- 设置密码 -->
+            <div id="private-setup">
+              <h3>🔐 设置 3 道密码</h3>
+              <div class="pw-inputs">
+                <input class="input" type="password" id="setup-p1" placeholder="密码 1" maxlength="60">
+                <input class="input" type="password" id="setup-p2" placeholder="密码 2" maxlength="60">
+                <input class="input" type="password" id="setup-p3" placeholder="密码 3" maxlength="60">
+              </div>
+              <div class="pw-hint">这 3 道密码将作为加密密钥，内容使用 AES-256 真加密存储。请务必牢记，丢失无法找回。</div>
+              <button class="btn btn-gold" style="width:100%" onclick="setupPrivate()">初始化私密空间</button>
+            </div>
+            <!-- 验证 -->
+            <div id="private-login">
+              <h3>🔐 输入密码进入</h3>
+              <div class="pw-inputs">
+                <input class="input" type="password" id="private-p1" placeholder="密码 1" maxlength="60">
+                <input class="input" type="password" id="private-p2" placeholder="密码 2" maxlength="60">
+                <input class="input" type="password" id="private-p3" placeholder="密码 3" maxlength="60">
+              </div>
+              <div class="pw-hint" id="private-lock-msg">需连续输入 3 道正确密码方可进入，输错任意一道今日将锁定。</div>
+              <button class="btn btn-gold" style="width:100%" id="btn-private-enter" onclick="enterPrivate()">进入私密空间</button>
+            </div>
+            <!-- 内容 -->
+            <div id="private-content" style="display:none">
+              <div class="row-btns">
+                <button class="btn btn-ghost" onclick="exitPrivate()">退出</button>
+                <button class="btn btn-gold" onclick="savePrivate()">💾 加密保存</button>
+              </div>
+              <textarea class="textarea" id="private-notes" style="margin-top:14px" placeholder="这里的内容将以 AES-256 加密存储于本地…"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- 设置 -->
+        <section id="settings-section" class="content-section">
+          <h2 class="section-head">设置</h2>
+          <div class="settings-card">
+            <!-- AI 连接配置 -->
+            <div class="settings-block">
+              <h3 class="settings-block-title">🤖 AI 连接配置</h3>
+              <p class="settings-hint">选择你要连接的 AI 服务，填入对应的 API Key 即可启用。配置仅保存在本机浏览器中，不会上传到任何服务器。</p>
+              <div class="settings-row">
+                <div class="field" style="flex:1;min-width:200px">
+                  <label class="field-label">AI 服务</label>
+                  <select class="select" id="ai-provider" onchange="onProviderChange()">
+                    <option value="zhipu">智谱 AI</option>
+                    <option value="openai">ChatGPT</option>
+                    <option value="codex">Codex</option>
+                    <option value="kimi">Kimi</option>
+                    <option value="gemini">Gemini</option>
+                    <option value="deepseek">DeepSeek</option>
+                    <option value="qwen">千问</option>
+                    <option value="alibaba">阿里</option>
+                    <option value="custom">自定义</option>
+                  </select>
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="field" style="flex:1;min-width:200px">
+                  <label class="field-label">API Base URL</label>
+                  <input class="input" type="text" id="ai-baseurl" placeholder="选择服务后自动填充，可修改">
+                </div>
+              </div>
+              <div class="settings-row">
+                <div class="field" style="flex:1;min-width:140px">
+                  <label class="field-label">模型名称</label>
+                  <input class="input" type="text" id="ai-model" placeholder="如：glm-4.7-flash（智谱免费版）">
+                </div>
+                <div class="field" style="flex:1.4;min-width:200px">
+                  <label class="field-label">API Key</label>
+                  <input class="input" type="password" id="ai-key" placeholder="在此粘贴你的 API Key" autocomplete="off">
+                </div>
+              </div>
+              <div class="settings-row">
+                <button class="btn btn-gold" onclick="saveAIConfig()">保存 AI 配置</button>
+                <button class="btn btn-ghost" onclick="clearAIConfig()">清除并改用服务端</button>
+              </div>
+              <div class="ai-status" id="ai-config-status">尚未配置本地 AI。</div>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-block">
+              <h3 class="settings-block-title">🔊 音效与显示</h3>
+              <p class="settings-hint">开启交互提示音：点击按钮或按键时会播放「嘟」声；并可调整界面字体大小。设置自动保存于本机。</p>
+              <div class="settings-row" style="align-items:center">
+                <div class="field" style="flex:1;min-width:220px">
+                  <label class="field-label">提示音音量 <span id="sound-val" class="set-val">50%</span></label>
+                  <input class="range" type="range" id="set-sound" min="0" max="100" value="50" oninput="onSoundVolume(this.value)" onchange="saveSoundSettings()">
+                </div>
+                <button class="btn btn-ghost" type="button" onclick="testBeep()">🔔 试听</button>
+              </div>
+              <div class="settings-row" style="align-items:center">
+                <div class="field" style="flex:1;min-width:220px">
+                  <label class="field-label">字体大小 <span id="font-val" class="set-val">100%</span></label>
+                  <input class="range" type="range" id="set-font" min="80" max="150" value="100" oninput="onFontScale(this.value)" onchange="saveSoundSettings()">
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-divider"></div>
+
+            <div class="settings-row">
+              <div class="field" style="flex:1;min-width:200px">
+                <label class="field-label">城市（用于天气）</label>
+                <input class="input" type="text" id="set-city" placeholder="如：上海">
+              </div>
+              <button class="btn btn-gold" onclick="saveCity()">保存城市</button>
+            </div>
+            <div class="ai-status" id="ai-status">检测 AI 状态中…</div>
+            <div class="settings-row">
+              <button class="btn btn-ghost" onclick="exportData()">⬇ 导出数据备份</button>
+              <button class="btn btn-ghost" onclick="document.getElementById('file-import').click()">⬆ 导入备份</button>
+              <input type="file" id="file-import" accept=".json" style="display:none" onchange="if(this.files[0])importData(this.files[0]);this.value=''">
+            </div>
+            <p style="font-size:12px;color:var(--text-3);line-height:1.7">提示：若未在此处配置，程序会回退到 <code>config.json</code> 中的服务端智谱 Key（以 <code>zhipu_</code> 开头）。未配置时 AI 模块使用本地兜底内容。</p>
+          </div>
+        </section>
+
+        <!-- 个人愿望 -->
+        <section id="wishes-section" class="content-section">
+          <div class="section-head-row">
+            <h2 class="section-head">个人愿望</h2>
+            <span class="diary-badge" id="wish-count"></span>
+            <div class="wordbook-box" style="margin-left:auto">
+              <button class="btn btn-gold btn-sm" onclick="openWishEditor()">＋ 添加愿望</button>
+            </div>
+          </div>
+          <p class="card-sub" style="margin-bottom:16px">许下愿望，AGNES AI 会为它生成专属小图标。点击图标查看详情，并标记「实现 / 取消」。</p>
+          <div id="wishes-grid" class="wishes-grid"></div>
+          <button class="fab" id="fab-wish" onclick="openWishEditor()" title="添加愿望">＋</button>
+        </section>
+
+        <!-- 有用的网址清单 -->
+        <section id="links-section" class="content-section">
+          <div class="section-head-row">
+            <h2 class="section-head">有用的网址清单</h2>
+            <div class="wordbook-box" style="margin-left:auto">
+              <button class="btn btn-gold btn-sm" onclick="openLinkEditor()">＋ 添加清单</button>
+            </div>
+          </div>
+          <p class="card-sub" style="margin-bottom:16px">点击「＋ 添加清单」新增链接；拖动卡片可调整顺序，本地永久保存。</p>
+          <div id="links-list" class="links-list"></div>
+          <button class="fab" id="fab-link" onclick="openLinkEditor()" title="添加网址">＋</button>
+        </section>
+
+        <!-- 行情关注器 -->
+        <section id="market-section" class="content-section">
+          <div class="section-head-row">
+            <h2 class="section-head">行情关注器</h2>
+            <div class="wordbook-box">
+              <button class="btn btn-ghost btn-sm" onclick="openMarketAdd()">＋ 添加关注</button>
+              <button class="btn btn-gold btn-sm" onclick="refreshMarket()">🔄 刷新行情</button>
+            </div>
+          </div>
+          <p class="card-sub" style="margin-bottom:16px">磁吸式行情块：拖动可移动、靠近会吸附堆叠；圆环展示涨跌。自定义关注项带「自定义」角标，与系统预设区分。</p>
+          <div id="market-canvas" class="market-canvas"></div>
+        </section>
+
+        <!-- 信息搜集（必须位于 .content 滚动容器内，否则会被 .main{overflow:hidden} 裁掉而无法显示） -->
+        <section id="collect-section" class="content-section">
+          <h2 class="section-head">信息搜集</h2>
+          <div id="collect-mount"><!-- 由 collect.js 渲染 --></div>
+        </section>
+
+        <!-- 文件格式转换 -->
+        <section id="convert-section" class="content-section">
+          <h2 class="section-head">文件格式转换</h2>
+          <div id="convert-mount"><!-- 由 convert.js 渲染 --></div>
+        </section>
+
+        <!-- 内容区底部信息条 -->
+        <div class="content-foot" aria-label="工作台信息">
+          <span class="content-foot-dot"></span>
+          <span class="content-foot-label">AI 优先 · 本地辅助</span>
+          <span class="content-foot-sep">·</span>
+          <span class="content-foot-meta" id="content-foot-meta">智谱 GLM-4-Flash 实时驱动 · 数据本地留存</span>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="demo-mock.js"></script>
+  <script src="app.js"></script>
+  <script src="features.js"></script>
+  <script src="features-extras.js"></script>
+  <script src="features-cet4.js"></script>
+  <script src="collect.js"></script>
+  <script src="comp-data.js"></script>
+  <script src="competition.js"></script>
+  <script src="convert.js"></script>
+
+  <!-- 通用弹窗 -->
+  <div id="pw-modal" class="pw-modal">
+    <div id="pw-modal-box" class="pw-modal-box"></div>
+  </div>
+  <script src="../demo-badge.js" defer></script>
+</body>
+</html>

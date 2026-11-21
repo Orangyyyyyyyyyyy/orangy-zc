@@ -1,10 +1,136 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import "../../styles/works.css";
+import { projects, categories } from "../../data/projects";
+
+const total = projects.length;
+const live = projects.filter((p) => p.statusTone === "live").length;
+const meta = [
+  { label: "PROJECTS", value: String(total) },
+  { label: "PLAYABLE", value: String(total) },
+  { label: "IN USE", value: String(live) },
+  { label: "SINCE", value: "2026" },
+];
 ---
-<BaseLayout title="作品集 · ORANGY ZC">
-  <section class="page-shell">
-    <span class="page-kicker">SELECTED WORKS</span>
-    <h1 class="page-title">作品集</h1>
-    <p class="page-intro">这里记录想法如何变成真实的作品。项目内容、预览图和演示链接将在后续逐步补充。</p>
+
+<BaseLayout
+  title="作品集 · ORANGY ZC"
+  description="四个按开发顺序排下来的项目：个人工作台、拾取 Harvester、山海司、卡牌店模拟经营，全部可以在线体验。"
+>
+  <section class="w-hero">
+    <div class="w-wrap">
+      <div class="w-hero-grid">
+        <div>
+          <span class="page-kicker">SELECTED WORKS · 2026</span>
+          <h1 class="page-title">作品集</h1>
+          <p class="w-hero-sub">
+            按开发的先后顺序排下来：从每天在用的工作台，到一个网址就能抓的爬虫，再到两款自己做的游戏。
+            每一个都能在线点开——不是截图，是真的能玩。
+          </p>
+        </div>
+
+        <div class="w-meta">
+          {
+            meta.map((m) => (
+              <div>
+                <b>{m.value}</b>
+                {m.label}
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </section>
+
+  <div class="w-wrap">
+    <div class="w-filter" role="group" aria-label="按类别筛选">
+      {
+        categories.map((c, i) => (
+          <button class="w-chip" type="button" data-filter={c} aria-pressed={i === 0 ? "true" : "false"}>
+            {c}
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="w-grid" id="works-grid">
+      {
+        projects.map((p, i) => (
+          <article class:list={["w-card", { "is-wide": i === 0 || i === 3 }]} data-cat={p.category}>
+            <div class="w-cover">
+              <span class="w-no">{p.no} / {p.en}</span>
+              <span class="w-status">{p.status}</span>
+              <img src={p.cover} alt={`${p.title} 界面截图`} loading={i === 0 ? "eager" : "lazy"} />
+            </div>
+
+            <div class="w-body">
+              <span class="w-kicker">{p.kicker}</span>
+              <h2 class="w-name">
+                {p.title}
+                <em>{p.year}</em>
+              </h2>
+              <p class="w-desc">{p.summary}</p>
+
+              <div class="w-foot">
+                {p.tags.map((t) => (
+                  <span class="w-tag">{t}</span>
+                ))}
+                <span class="w-arrow" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M7 17L17 7M9 7h8v8"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <a class="w-link" href={`/works/${p.slug}/`} aria-label={`查看 ${p.title} 详情`} />
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="w-statement">
+      <h2>不是「用 AI 写代码」，<br />是把想法推成能跑起来的东西。</h2>
+      <p>
+        工作台是每天在用的时候一点点改出来的；爬虫是因为懒得一张张右键；
+        两款游戏是想做出自己愿意反复打开的那个版本。技术只是手段，能不能真的用起来才是标准。
+      </p>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      var bar = document.querySelector(".w-filter");
+      var grid = document.getElementById("works-grid");
+      if (!bar || !grid) return;
+
+      bar.addEventListener("click", function (event) {
+        var btn = event.target.closest(".w-chip");
+        if (!btn) return;
+
+        var want = btn.dataset.filter;
+        bar.querySelectorAll(".w-chip").forEach(function (chip) {
+          chip.setAttribute("aria-pressed", chip === btn ? "true" : "false");
+        });
+
+        grid.querySelectorAll(".w-card").forEach(function (card) {
+          card.hidden = !(want === "全部" || card.dataset.cat === want);
+        });
+
+        var first = null;
+        grid.querySelectorAll(".w-card").forEach(function (card) {
+          card.classList.remove("is-wide");
+          if (!card.hidden && !first) first = card;
+        });
+        if (first) first.classList.add("is-wide");
+      });
+    })();
+  </script>
 </BaseLayout>
