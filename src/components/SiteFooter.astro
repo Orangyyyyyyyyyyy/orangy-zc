@@ -1,0 +1,42 @@
+---
+import { siteConfig, navigation } from "../config/site";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-landscape" aria-hidden="true"></div>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/">ORANGY ZC<span>.</span></a>
+        <p>{siteConfig.description}</p>
+        <small>A PERSONAL DIGITAL SPACE · EST. 2026</small>
+      </div>
+
+      <div class="footer-column">
+        <h2>探索空间</h2>
+        {navigation.slice(0, 3).map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+
+      <div class="footer-column">
+        <h2>更多内容</h2>
+        {navigation.slice(3).map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+
+      <div class="footer-column">
+        <h2>保持联系</h2>
+        {siteConfig.githubUrl && (
+          <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer">GitHub ↗</a>
+        )}
+        {siteConfig.email && <a href={`mailto:${siteConfig.email}`}>Email ↗</a>}
+        {!siteConfig.githubUrl && !siteConfig.email && <span class="muted">联系方式即将开放</span>}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© {year} ORANGY ZC. ALL RIGHTS RESERVED.</span>
+      <span class="footer-motto">山水有相逢 · KEEP EXPLORING</span>
+      <a href="#top">BACK TO TOP ↑</a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,54 @@
+---
+import { siteConfig, navigation } from "../config/site";
+
+const currentPath = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/"
+    ? currentPath === "/"
+    : currentPath === href || currentPath.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="ORANGY ZC 首页">
+    ORANGY ZC<span>.</span>
+  </a>
+
+  <nav class="desktop-nav" aria-label="主导航">
+    {navigation.map((link) => (
+      <a
+        href={link.href}
+        class:list={["nav-link", { active: isActive(link.href) }]}
+        aria-current={isActive(link.href) ? "page" : undefined}
+      >
+        <span class="nav-en">{link.en}</span>
+        <span class="nav-cn">{link.label}</span>
+      </a>
+    ))}
+  </nav>
+
+  <div class="header-right">
+    {siteConfig.githubUrl && (
+      <a class="github-link" href={siteConfig.githubUrl} target="_blank" rel="noreferrer" aria-label="GitHub">
+        GitHub ↗
+      </a>
+    )}
+
+    <details class="mobile-menu">
+      <summary aria-label="打开导航菜单">
+        <span></span><span></span>
+      </summary>
+      <nav class="mobile-nav" aria-label="移动端导航">
+        {navigation.map((link) => (
+          <a href={link.href} aria-current={isActive(link.href) ? "page" : undefined}>
+            <span>{link.label}</span><small>{link.en}</small>
+          </a>
+        ))}
+        {siteConfig.githubUrl && (
+          <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer">
+            <span>GitHub</span><small>EXTERNAL</small>
+          </a>
+        )}
+      </nav>
+    </details>
+  </div>
+</header>
