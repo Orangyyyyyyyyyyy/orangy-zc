@@ -710,7 +710,7 @@
 }
 
 .w-grid-compact {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: clamp(12px, 1.6vw, 18px);
   margin-bottom: 0;
 }
