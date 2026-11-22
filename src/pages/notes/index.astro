@@ -8,20 +8,24 @@ import { journal } from "../../data/journal";
     <h1 class="page-title">随笔与记录</h1>
     <p class="page-intro">技术学习、开发记录、灵感片段，以及值得留下来的思考。</p>
 
-    <ul class="note-list">
-      {
-        journal.map((entry) => (
-          <li class="note-item">
-            <span class="note-date">{entry.date}</span>
-            <div>
-              <h2 class="note-title">{entry.title}</h2>
-              <p class="note-excerpt">{entry.excerpt}</p>
-            </div>
-            <span class="note-cat">{entry.category}</span>
-          </li>
-        ))
-      }
-    </ul>
+    {
+      journal.length > 0 ? (
+        <ul class="note-list">
+          {journal.map((entry) => (
+            <li class="note-item">
+              <span class="note-date">{entry.date}</span>
+              <div>
+                <h2 class="note-title">{entry.title}</h2>
+                <p class="note-excerpt">{entry.excerpt}</p>
+              </div>
+              <span class="note-cat">{entry.category}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="note-empty">这一页还空着，等真正写完一篇再放上来。</p>
+      )
+    }
   </section>
 </BaseLayout>
 
@@ -32,6 +36,15 @@ import { journal } from "../../data/journal";
     list-style: none;
     border-top: 1px solid rgba(41, 39, 32, 0.14);
     max-width: 860px;
+  }
+
+  .note-empty {
+    margin: clamp(40px, 6vw, 64px) 0 0;
+    padding: 26px 0;
+    border-top: 1px solid rgba(41, 39, 32, 0.14);
+    font: 13px/1.95 "Noto Serif SC", "Songti SC", serif;
+    color: var(--muted);
+    letter-spacing: 0.04em;
   }
 
   .note-item {

@@ -2,14 +2,13 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HeroSection from "../components/Hero/HeroSection.astro";
 import { projects } from "../data/projects";
-import { journal } from "../data/journal";
 import { siteConfig } from "../config/site";
 import "../styles/parallax.css";
 import "../styles/hero.css";
 import "../styles/home.css";
 
-// 首页只放四个能直接点开体验的项目（不含较新的 MC 搭子，全部作品页仍可见）
-const featuredSlugs = ["workspace", "harvester", "shanhai", "cardshop"];
+// 首页放五个能直接点开体验的项目，顺序与作品集一致
+const featuredSlugs = ["workspace", "harvester", "shanhai", "mc-companion", "cardshop"];
 const featured = featuredSlugs
   .map((slug) => projects.find((project) => project.slug === slug))
   .filter((project): project is (typeof projects)[number] => Boolean(project));
@@ -39,8 +38,8 @@ const facts = [
         <div class="about__text" data-reveal>
           <p>我在做的东西，大多来自一个很小的执念：把每天要重复做的事，交给程序去盯。</p>
           <p>
-            作品集里的四个项目，是按开发的先后顺序排下来的——从每天都在用的个人工作台，到一本网址就能抓的拾取
-            Harvester，再到两款自己也想反复打开的游戏。它们都不算大，但都在真实地跑着。
+            作品集里的五个项目，是按开发的先后顺序排下来的——从每天都在用的个人工作台，到一本网址就能抓的拾取
+            Harvester，再到两款自己也想反复打开的游戏，还有最近在折腾的、会陪你一起下矿的 AI 队友。它们都不算大，但都在真实地跑着。
           </p>
           <p>
             设计和代码对我来说不是两件事。配色、留白、一次点击之后的手感，和数据结构、缓存、渲染性能，最后都落在同一个问题上：
@@ -130,38 +129,10 @@ const facts = [
     </div>
   </section>
 
-  <!-- 04 · 随笔 ------------------------------------------------------------ -->
-  <section class="sec" id="journal">
-    <div class="sec__inner">
-      <div class="sec__head" data-reveal>
-        <div>
-          <p class="sec__label"><b>04</b><span>Journal</span></p>
-          <h2 class="sec__title">随笔与记录</h2>
-        </div>
-        <a class="sec__more" href="/notes/">全部随笔 <span aria-hidden="true">→</span></a>
-      </div>
-
-      <div class="journal__list">
-        {
-          journal.map((entry, index) => (
-            <a class="journal__item" href={entry.href} data-reveal data-reveal-delay={String(index * 80)}>
-              <span class="journal__date">{entry.date}</span>
-              <span>
-                <span class="journal__title">{entry.title}</span>
-                <span class="journal__excerpt" style="display:block">{entry.excerpt}</span>
-              </span>
-              <span class="journal__cat">{entry.category}</span>
-            </a>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
-  <!-- 05 · 联系 ------------------------------------------------------------ -->
+  <!-- 04 · 联系 ------------------------------------------------------------ -->
   <section class="sec" id="contact">
     <div class="sec__inner">
-      <h2 class="sec__label" data-reveal><b>05</b><span>Contact</span></h2>
+      <h2 class="sec__label" data-reveal><b>04</b><span>Contact</span></h2>
 
       <div class="contact__grid">
         <p class="contact__lead" data-reveal>
