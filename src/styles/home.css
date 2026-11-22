@@ -1,0 +1,500 @@
+/* ==========================================================================
+   首页正文板块 —— 关于 / 作品 / 创作理念 / 随笔 / 联系
+   延续水墨纸感，但不再复用画作背景，回到阅读与展示。
+   ========================================================================== */
+
+.home-main {
+  background: var(--paper);
+}
+
+.sec {
+  padding: clamp(66px, 9vw, 128px) clamp(22px, 6vw, 96px);
+}
+
+.sec + .sec {
+  border-top: 1px solid rgba(41, 39, 32, 0.1);
+}
+
+.sec__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.sec[id] {
+  scroll-margin-top: 96px;
+}
+
+.sec__label {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 clamp(18px, 2.4vw, 30px);
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.sec__label b {
+  font-weight: 500;
+  color: var(--orange);
+}
+
+.sec__label::after {
+  content: "";
+  width: clamp(28px, 5vw, 64px);
+  height: 1px;
+  background: rgba(41, 39, 32, 0.18);
+}
+
+.sec__title {
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 500;
+  font-size: clamp(26px, 3.4vw, 42px);
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+
+.sec__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: clamp(34px, 5vw, 64px);
+}
+
+.sec__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(41, 39, 32, 0.22);
+  transition: color 240ms var(--ease-ink), border-color 240ms var(--ease-ink);
+}
+
+.sec__more:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+/* --------------------------------------------------------------- 关于 */
+.about__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+  gap: clamp(36px, 6vw, 92px);
+  align-items: start;
+}
+
+.about__text p {
+  margin: 0 0 1.6em;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(14px, 1.15vw, 16px);
+  line-height: 2.15;
+  letter-spacing: 0.02em;
+  color: #56524a;
+}
+
+.about__text p:first-child {
+  font-size: clamp(16px, 1.5vw, 20px);
+  line-height: 1.95;
+  color: var(--ink);
+}
+
+.about__sign {
+  margin: 2.2em 0 0;
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.about__facts {
+  margin: 0;
+  border-top: 1px solid rgba(41, 39, 32, 0.14);
+}
+
+.about__fact {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(41, 39, 32, 0.1);
+}
+
+.about__fact dt {
+  margin: 0;
+  padding-top: 4px;
+  font: 9px/1.4 Inter, sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.about__fact dd {
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+
+/* --------------------------------------------------------------- 精选作品 */
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(20px, 2.6vw, 44px);
+  row-gap: clamp(44px, 5vw, 80px);
+  align-items: start;
+}
+
+.work {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 不对称版式：大幅与小幅交错，像画册而不是卡片列表 */
+.work:nth-child(1) {
+  grid-column: 1 / span 7;
+}
+
+.work:nth-child(2) {
+  grid-column: 9 / span 4;
+  margin-top: clamp(32px, 4.4vw, 84px);
+}
+
+.work:nth-child(3) {
+  grid-column: 2 / span 5;
+}
+
+.work:nth-child(4) {
+  grid-column: 8 / span 5;
+  margin-top: clamp(0px, 3vw, 48px);
+}
+
+.work__cover {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 11;
+  background: var(--paper-deep);
+  border: 1px solid rgba(41, 39, 32, 0.08);
+}
+
+.work__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.004);
+  transition: transform 1100ms var(--ease-ink), filter 700ms var(--ease-ink);
+  filter: saturate(0.86) contrast(0.98);
+}
+
+.work:hover .work__cover img {
+  transform: scale(1.035);
+  filter: saturate(1) contrast(1);
+}
+
+.work__meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.work__no {
+  display: inline-block;
+  margin-right: 12px;
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.2em;
+  color: var(--orange);
+  vertical-align: 2px;
+}
+
+.work__name {
+  display: inline;
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 500;
+  font-size: clamp(16px, 1.5vw, 21px);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.work__kicker {
+  margin: 8px 0 0;
+  font: 11px/1.9 Inter, sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.work__year {
+  font: 9px/1 Inter, sans-serif;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+}
+
+.work__cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(243, 227, 203, 0);
+  transition: background 500ms var(--ease-ink);
+}
+
+.work:hover .work__cover::after {
+  background: rgba(243, 227, 203, 0.14);
+}
+
+/* --------------------------------------------------------------- 创作理念 */
+.phil {
+  background: var(--paper-deep);
+  border-top: 1px solid rgba(41, 39, 32, 0.1);
+  border-bottom: 1px solid rgba(41, 39, 32, 0.1);
+}
+
+.phil__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: clamp(28px, 5vw, 72px);
+}
+
+.phil__quote {
+  margin: 0;
+  max-width: 19.5em;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 500;
+  font-size: clamp(23px, 3.3vw, 42px);
+  line-height: 1.78;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+}
+
+.phil__body {
+  margin: clamp(26px, 3.4vw, 42px) 0 0;
+  max-width: 30em;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 14px;
+  line-height: 2.2;
+  color: var(--ink-soft);
+}
+
+.phil__seal {
+  width: 74px;
+  padding: 14px 8px;
+  border: 1px solid rgba(198, 107, 67, 0.5);
+  color: var(--orange);
+  writing-mode: vertical-rl;
+  text-align: center;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: 13px;
+  line-height: 1.1;
+  letter-spacing: 0.24em;
+  transform: rotate(-2.2deg);
+  user-select: none;
+}
+
+/* --------------------------------------------------------------- 随笔 */
+.journal__list {
+  border-top: 1px solid rgba(41, 39, 32, 0.14);
+}
+
+.journal__item {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  gap: clamp(14px, 2.4vw, 34px);
+  align-items: center;
+  padding: clamp(20px, 2.4vw, 28px) 0;
+  border-bottom: 1px solid rgba(41, 39, 32, 0.1);
+  color: inherit;
+  text-decoration: none;
+  transition: padding-left 460ms var(--ease-ink);
+}
+
+.journal__item:hover {
+  padding-left: 14px;
+}
+
+.journal__date {
+  font: 10px/1.4 Inter, sans-serif;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.journal__title {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 500;
+  font-size: clamp(15px, 1.5vw, 19px);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  transition: color 240ms var(--ease-ink);
+}
+
+.journal__item:hover .journal__title {
+  color: var(--orange);
+}
+
+.journal__excerpt {
+  margin: 8px 0 0;
+  font: 12px/1.9 "Noto Serif SC", "Songti SC", serif;
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+
+.journal__cat {
+  font: 9px/1 Inter, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------- 联系 */
+.contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(34px, 5vw, 80px);
+  align-items: start;
+}
+
+.contact__lead {
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 2;
+  color: var(--ink);
+  max-width: 19em;
+}
+
+.contact__mail {
+  display: inline-block;
+  margin: 0 0 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(41, 39, 32, 0.28);
+  font-family: "Instrument Serif", "Noto Serif SC", serif;
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 260ms var(--ease-ink), border-color 260ms var(--ease-ink);
+  word-break: break-word;
+}
+
+.contact__mail:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.contact__note {
+  margin: 18px 0 0;
+  font: 11px/1.9 Inter, sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 2.6vw, 34px);
+  margin-top: clamp(28px, 3.6vw, 44px);
+  padding-top: 22px;
+  border-top: 1px solid rgba(41, 39, 32, 0.12);
+}
+
+.contact__links a {
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color 220ms var(--ease-ink);
+}
+
+.contact__links a:hover {
+  color: var(--orange);
+}
+
+/* --------------------------------------------------------------- 淡入 */
+.has-js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 900ms var(--ease-ink),
+    transform 900ms var(--ease-ink);
+}
+
+.has-js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* --------------------------------------------------------------- 响应式 */
+@media (max-width: 900px) {
+  .sec {
+    padding: clamp(58px, 9vw, 84px) clamp(20px, 6vw, 40px);
+  }
+
+  .about__grid,
+  .contact__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .works__grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 44px;
+  }
+
+  .work:nth-child(1),
+  .work:nth-child(2),
+  .work:nth-child(3),
+  .work:nth-child(4) {
+    grid-column: 1 / -1;
+    margin-top: 0;
+  }
+
+  .journal__item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 8px;
+  }
+
+  .journal__date {
+    grid-column: 1 / -1;
+  }
+
+  .phil__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .phil__seal {
+    justify-self: start;
+    width: 46px;
+    padding: 10px 6px;
+    font-size: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .has-js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .work__cover img,
+  .journal__item {
+    transition: none;
+  }
+}

@@ -35,6 +35,29 @@ a { color: inherit; }
 
 button, input, textarea, select { font: inherit; }
 
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 200;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  font: 12px/1 "Noto Serif SC", "Songti SC", serif;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 200ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+:where(a, button, summary):focus-visible {
+  outline: 1px solid var(--orange);
+  outline-offset: 3px;
+}
+
 ::selection {
   color: var(--paper);
   background: var(--orange);
@@ -207,37 +230,10 @@ button, input, textarea, select { font: inherit; }
   text-decoration: none;
 }
 
-.home-hero {
-  min-height: min(780px, calc(100svh - 82px));
-  display: flex;
-  align-items: center;
-  padding: clamp(60px, 9vw, 130px) clamp(24px, 5vw, 84px);
-  background-color: var(--paper);
-  background-image: url("/images/home-inkwash.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.home-hero-content {
-  max-width: 650px;
-}
-
 .eyebrow {
   color: var(--ink-soft);
   font: 10px Inter, sans-serif;
   letter-spacing: 3px;
-}
-
-.home-hero h1 {
-  margin: 20px 0;
-  font: clamp(48px, 7vw, 96px)/.98 "Instrument Serif", Georgia, serif;
-  letter-spacing: -2px;
-}
-
-.home-hero p {
-  max-width: 480px;
-  font: clamp(18px, 2vw, 25px)/1.8 "Noto Serif SC", "Songti SC", serif;
 }
 
 .text-link {
@@ -322,12 +318,6 @@ button, input, textarea, select { font: inherit; }
   .footer-brand { grid-column: 1 / -1; }
   .footer-brand > a { font-size: 30px; }
   .footer-bottom { align-items: flex-start; flex-direction: column; }
-  .home-hero {
-    min-height: 680px;
-    background-position: 58% center;
-    align-items: flex-start;
-    padding-top: 90px;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,44 @@
+---
+import {
+  type LandscapeLayerConfig,
+  landscapeCanvas,
+  pct,
+  shiftRatio,
+} from "../../config/landscape";
+
+interface Props {
+  layer: LandscapeLayerConfig;
+}
+
+const { layer } = Astro.props;
+
+const vars = [
+  `--l-x:${pct(layer.x, landscapeCanvas.width)}`,
+  `--l-y:${pct(layer.y, landscapeCanvas.height)}`,
+  `--l-w:${pct(layer.width, landscapeCanvas.width)}`,
+  `--l-shift:${shiftRatio(layer.shift).toFixed(6)}`,
+  `--l-z:${layer.z}`,
+].join("; ");
+---
+
+<div
+  class:list={[
+    "ink-layer",
+    `ink-layer--${layer.id}`,
+    layer.animation && `is-${layer.animation}`,
+  ]}
+  style={vars}
+  aria-hidden="true"
+>
+  <picture>
+    <source srcset={`${layer.file}.webp`} type="image/webp" />
+    <img
+      src={`${layer.file}.png`}
+      alt=""
+      width={layer.width}
+      height={layer.height}
+      loading="eager"
+      decoding="async"
+    />
+  </picture>
+</div>

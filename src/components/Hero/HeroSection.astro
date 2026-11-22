@@ -1,0 +1,22 @@
+---
+import LandscapeScene from "./LandscapeScene.astro";
+import HeroIntroduction from "./HeroIntroduction.astro";
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <div class="hero__stage">
+    <LandscapeScene />
+    <div class="hero__veil" aria-hidden="true"></div>
+    <HeroIntroduction />
+  </div>
+
+  <a class="hero__cue" href="#about" aria-label="向下浏览：关于我">
+    <span class="hero__cue-rule" aria-hidden="true"></span>
+    <span class="hero__cue-label">SCROLL</span>
+  </a>
+</section>
+
+<script>
+  import { initHero } from "../../scripts/hero";
+  initHero();
+</script>

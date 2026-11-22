@@ -1,0 +1,36 @@
+---
+const year = new Date().getFullYear();
+---
+
+<div class="hero__intro">
+  <p class="hero__eyebrow">
+    <span class="hero__eyebrow-rule" aria-hidden="true"></span>
+    <span>Personal Portfolio · {year}</span>
+  </p>
+
+  <h1 class="hero__title" id="hero-title">
+    于山水之间，<br />
+    探索创造的可能<span class="hero__period" aria-hidden="true">。</span>
+  </h1>
+
+  <p class="hero__sub">Creative Practice / Design &amp; Technology</p>
+
+  <div class="hero__actions">
+    <a class="btn btn--ink" href="/works/">
+      <span>Explore My Works</span>
+      <svg class="btn__icon" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path
+          d="M4 12h15M13 6l6 6-6 6"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+    </a>
+    <a class="btn btn--ghost" href="/about/"><span>About Me</span></a>
+  </div>
+
+  <p class="hero__hint" aria-hidden="true">
+    <span class="hero__hint-dot"></span>移动鼠标，山水分层呼吸
+  </p>
+</div>

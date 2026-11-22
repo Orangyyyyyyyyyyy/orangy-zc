@@ -1,0 +1,41 @@
+---
+import {
+  backgroundLayer,
+  landscapeCanvas,
+  landscapeLayers,
+  landscapeLqip,
+  shiftRatio,
+} from "../../config/landscape";
+import ParallaxLayer from "./ParallaxLayer.astro";
+
+const { width, height } = landscapeCanvas;
+---
+
+<div
+  class="ink-scene"
+  data-ink-scene
+  style={`aspect-ratio: ${width} / ${height}; --lqip: url("${landscapeLqip}")`}
+>
+  <div class="ink-scene__plate" aria-hidden="true"></div>
+
+  <div class="ink-layer ink-layer--background" style={`--l-shift:${shiftRatio(backgroundLayer.shift).toFixed(6)}; --l-z:1`}>
+    <picture>
+      <source srcset={`${backgroundLayer.file}.webp`} type="image/webp" />
+      <img
+        src={`${backgroundLayer.file}.jpg`}
+        alt={backgroundLayer.label}
+        width={width}
+        height={height}
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        data-ink-plate
+      />
+    </picture>
+  </div>
+
+  {landscapeLayers.map((layer) => <ParallaxLayer layer={layer} />)}
+
+  <div class="ink-scene__mist" aria-hidden="true"></div>
+  <div class="ink-scene__grain" aria-hidden="true"></div>
+</div>

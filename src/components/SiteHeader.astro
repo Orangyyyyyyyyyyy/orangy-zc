@@ -1,6 +1,12 @@
 ---
 import { siteConfig, navigation } from "../config/site";
 
+interface Props {
+  variant?: "solid" | "overlay";
+}
+
+const { variant = "solid" } = Astro.props;
+
 const currentPath = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/"
@@ -8,7 +14,7 @@ const isActive = (href: string) =>
     : currentPath === href || currentPath.startsWith(`${href}/`);
 ---
 
-<header class="site-header">
+<header class:list={["site-header", `site-header--${variant}`]} data-header>
   <a class="brand" href="/" aria-label="ORANGY ZC 首页">
     ORANGY ZC<span>.</span>
   </a>

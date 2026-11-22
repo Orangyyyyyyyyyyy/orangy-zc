@@ -1,44 +1,188 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import "../styles/works.css";
+import HeroSection from "../components/Hero/HeroSection.astro";
 import { projects } from "../data/projects";
+import { journal } from "../data/journal";
+import { siteConfig } from "../config/site";
+import "../styles/parallax.css";
+import "../styles/hero.css";
+import "../styles/home.css";
+
+// 首页只放四个能直接点开体验的项目（不含较新的 MC 搭子，全部作品页仍可见）
+const featuredSlugs = ["workspace", "harvester", "shanhai", "cardshop"];
+const featured = featuredSlugs
+  .map((slug) => projects.find((project) => project.slug === slug))
+  .filter((project): project is (typeof projects)[number] => Boolean(project));
+
+const facts = [
+  { label: "方向", value: "AI 应用 · 交互设计 · 前端工程" },
+  { label: "做法", value: "本地优先 · 原生实现 · 小步迭代" },
+  { label: "工具", value: "TypeScript · Astro · Node · Canvas" },
+  { label: "近况", value: "个人工作台持续迭代中，同时在做新的小实验" },
+];
 ---
 
-<BaseLayout title="ORANGY ZC. · 首页">
-  <section class="home-hero">
-    <div class="home-hero-content">
-      <span class="eyebrow">A PERSONAL DIGITAL SPACE · EST. 2026</span>
-      <h1>ORANGY ZC<span style="color: var(--orange)">.</span></h1>
-      <p>在想法与现实之间，<br />创造属于自己的数字世界。</p>
-      <a class="text-link" href="/works">探索更多 <span aria-hidden="true">→</span></a>
+<BaseLayout
+  title="ORANGY ZC. · 于山水之间"
+  description="ORANGY ZC 的个人作品集：一个关于创造、探索与数字实验的空间。水墨山水、视差图层、作品与随笔。"
+  headerVariant="overlay"
+  preloadHero
+>
+  <HeroSection />
+
+  <!-- 01 · 关于 ------------------------------------------------------------ -->
+  <section class="sec" id="about">
+    <div class="sec__inner">
+      <h2 class="sec__label" data-reveal><b>01</b><span>About — 关于</span></h2>
+
+      <div class="about__grid">
+        <div class="about__text" data-reveal>
+          <p>我在做的东西，大多来自一个很小的执念：把每天要重复做的事，交给程序去盯。</p>
+          <p>
+            作品集里的四个项目，是按开发的先后顺序排下来的——从每天都在用的个人工作台，到一本网址就能抓的拾取
+            Harvester，再到两款自己也想反复打开的游戏。它们都不算大，但都在真实地跑着。
+          </p>
+          <p>
+            设计和代码对我来说不是两件事。配色、留白、一次点击之后的手感，和数据结构、缓存、渲染性能，最后都落在同一个问题上：
+            它好不好用，耐不耐看。
+          </p>
+          <p class="about__sign">Orangy ZC · Independent Maker</p>
+        </div>
+
+        <dl class="about__facts" data-reveal data-reveal-delay="120">
+          {
+            facts.map((fact) => (
+              <div class="about__fact">
+                <dt>{fact.label}</dt>
+                <dd>{fact.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
     </div>
   </section>
 
-  <section class="w-wrap w-home">
-    <div class="w-home-head">
-      <div>
-        <span class="page-kicker">SELECTED WORKS · 2026</span>
-        <h2 class="w-home-title">做过的四个东西</h2>
+  <!-- 02 · 精选作品 -------------------------------------------------------- -->
+  <section class="sec" id="works">
+    <div class="sec__inner">
+      <div class="sec__head" data-reveal>
+        <div>
+          <p class="sec__label"><b>02</b><span>Selected Works</span></p>
+          <h2 class="sec__title">精选作品</h2>
+        </div>
+        <a class="sec__more" href="/works/">全部作品 <span aria-hidden="true">→</span></a>
       </div>
-      <a class="text-link" href="/works/">全部作品 <span aria-hidden="true">→</span></a>
-    </div>
 
-    <div class="w-grid w-grid-compact">
-      {
-        projects.map((p) => (
-          <article class="w-card w-card-small">
-            <div class="w-cover">
-              <span class="w-no">{p.no}</span>
-              <img src={p.cover} alt={`${p.title} 截图`} loading="lazy" />
-            </div>
-            <div class="w-body">
-              <h3 class="w-name">{p.title}</h3>
-              <p class="w-desc">{p.kicker}</p>
-            </div>
-            <a class="w-link" href={`/works/${p.slug}/`} aria-label={p.title} />
-          </article>
-        ))
-      }
+      <div class="works__grid">
+        {
+          featured.map((project, index) => (
+            <a
+              class="work"
+              href={`/works/${project.slug}/`}
+              data-reveal
+              data-reveal-delay={String(index * 90)}
+            >
+              <div class="work__cover">
+                <img
+                  src={project.cover}
+                  alt={`${project.title} 界面截图`}
+                  width="1200"
+                  height="825"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div class="work__meta">
+                <div>
+                  <span class="work__no">{project.no}</span>
+                  <h3 class="work__name">{project.title}</h3>
+                  <p class="work__kicker">{project.kicker}</p>
+                </div>
+                <span class="work__year">{project.year}</span>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · 创作理念 -------------------------------------------------------- -->
+  <section class="sec phil" id="philosophy">
+    <div class="sec__inner">
+      <h2 class="sec__label" data-reveal><b>03</b><span>Creative Philosophy</span></h2>
+
+      <div class="phil__grid">
+        <div data-reveal>
+          <blockquote class="phil__quote">
+            不是先用 AI 写代码，<br />
+            而是先把想法推成能跑起来的东西。
+          </blockquote>
+          <p class="phil__body">
+            技术只是手段。真正的标准是：它有没有被用起来，有没有在被用起来的第二天还想打开。
+            所以每做完一件事，我都会把它挂到线上，让它接受真实的使用——被用垮，比被夸好看有用得多。
+          </p>
+        </div>
+
+        <div class="phil__seal" aria-hidden="true" data-reveal>山水之間</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · 随笔 ------------------------------------------------------------ -->
+  <section class="sec" id="journal">
+    <div class="sec__inner">
+      <div class="sec__head" data-reveal>
+        <div>
+          <p class="sec__label"><b>04</b><span>Journal</span></p>
+          <h2 class="sec__title">随笔与记录</h2>
+        </div>
+        <a class="sec__more" href="/notes/">全部随笔 <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="journal__list">
+        {
+          journal.map((entry, index) => (
+            <a class="journal__item" href={entry.href} data-reveal data-reveal-delay={String(index * 80)}>
+              <span class="journal__date">{entry.date}</span>
+              <span>
+                <span class="journal__title">{entry.title}</span>
+                <span class="journal__excerpt" style="display:block">{entry.excerpt}</span>
+              </span>
+              <span class="journal__cat">{entry.category}</span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · 联系 ------------------------------------------------------------ -->
+  <section class="sec" id="contact">
+    <div class="sec__inner">
+      <h2 class="sec__label" data-reveal><b>05</b><span>Contact</span></h2>
+
+      <div class="contact__grid">
+        <p class="contact__lead" data-reveal>
+          如果你也在做一些「非做不可」的东西，<br />
+          欢迎写信给我。
+        </p>
+
+        <div data-reveal data-reveal-delay="100">
+          <a class="contact__mail" href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+          <p class="contact__note">通常几天内回信 · 聊作品、聊实现、聊下一步都可以</p>
+
+          <div class="contact__links">
+            {siteConfig.githubUrl && (
+              <a href={siteConfig.githubUrl} target="_blank" rel="noreferrer">GitHub ↗</a>
+            )}
+            {siteConfig.email && <a href={`mailto:${siteConfig.email}`}>Email ↗</a>}
+            <a href="/lab/">数字实验室</a>
+            <a href="/works/">作品集</a>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>

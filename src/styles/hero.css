@@ -1,0 +1,358 @@
+/* ==========================================================================
+   首页首屏 —— 山水卷轴
+   画作按原始 16:9 比例完整展示（不 cover 裁切），文字落在左侧留白处。
+   ========================================================================== */
+
+:root {
+  /* 水墨画纸的暖色，用于画作边缘与出血的过渡 */
+  --paper-ink: #f3e3cb;
+  --nav-h: 84px;
+  --ease-ink: cubic-bezier(0.22, 0.61, 0.24, 1);
+}
+
+/* --------------------------------------------------------------- 顶部导航 */
+.site-header.site-header--overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  transition:
+    background-color 420ms var(--ease-ink),
+    border-color 420ms var(--ease-ink),
+    backdrop-filter 420ms var(--ease-ink);
+}
+
+.site-header.site-header--overlay .brand,
+.site-header.site-header--overlay .nav-link,
+.site-header.site-header--overlay .github-link {
+  color: var(--ink);
+}
+
+.site-header.site-header--overlay .nav-link {
+  color: rgba(41, 39, 32, 0.66);
+}
+
+.site-header.site-header--overlay .nav-link:hover,
+.site-header.site-header--overlay .nav-link.active {
+  color: var(--ink);
+}
+
+.site-header.site-header--overlay.is-solid {
+  background-color: rgba(245, 240, 230, 0.9);
+  border-bottom-color: rgba(80, 70, 55, 0.14);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+}
+
+/* --------------------------------------------------------------- 首屏骨架 */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 2.6vh, 34px) clamp(6px, 1.4vw, 26px) clamp(44px, 6.4vh, 76px);
+  background: var(--paper);
+}
+
+.hero__stage {
+  position: relative;
+  width: min(100%, calc((100svh - clamp(70px, 10.4vh, 124px)) * 1.7216));
+  aspect-ratio: 1744 / 1013;
+}
+
+/* 文字下的柔光纸面，保证对比度又不遮挡远山 */
+.hero__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    96deg,
+    rgba(245, 240, 230, 0.7) 0%,
+    rgba(245, 240, 230, 0.44) 20%,
+    rgba(245, 240, 230, 0.14) 36%,
+    rgba(245, 240, 230, 0) 52%
+  );
+}
+
+/* --------------------------------------------------------------- 首屏文字 */
+.hero__intro {
+  position: absolute;
+  left: 6.2%;
+  top: 50%;
+  z-index: 3;
+  width: min(33%, 490px);
+  transform: translate3d(0, calc(-50% + var(--hero-progress, 0) * -26px), 0);
+  opacity: calc(1 - var(--hero-progress, 0) * 1.15);
+  will-change: transform, opacity;
+}
+
+.hero__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 clamp(18px, 2.4vh, 30px);
+  font: 10px/1.4 Inter, sans-serif;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(41, 39, 32, 0.62);
+}
+
+.hero__eyebrow-rule {
+  width: clamp(24px, 3vw, 42px);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", "Source Han Serif SC", serif;
+  font-weight: 500;
+  font-size: clamp(23px, 2.82vw, 42px);
+  line-height: 1.74;
+  letter-spacing: 0.085em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.hero__period {
+  color: var(--orange);
+}
+
+.hero__sub {
+  margin: clamp(14px, 2vh, 22px) 0 0;
+  font: 10px/2 Inter, sans-serif;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(41, 39, 32, 0.52);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: clamp(24px, 3.2vh, 36px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px;
+  border: 1px solid transparent;
+  font: 10px/1 Inter, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 260ms var(--ease-ink),
+    border-color 260ms var(--ease-ink),
+    color 260ms var(--ease-ink),
+    transform 260ms var(--ease-ink);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn--ink:hover {
+  background: var(--orange);
+  color: #fff;
+}
+
+.btn--ghost {
+  border-color: rgba(41, 39, 32, 0.24);
+  color: var(--ink);
+}
+
+.btn--ghost:hover {
+  border-color: var(--ink);
+  background: rgba(41, 39, 32, 0.05);
+}
+
+.btn__icon {
+  transition: transform 300ms var(--ease-ink);
+}
+
+.btn:hover .btn__icon {
+  transform: translateX(3px);
+}
+
+.hero__hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: clamp(22px, 3vh, 34px) 0 0;
+  font: 10px/1.6 "Noto Serif SC", "Songti SC", serif;
+  letter-spacing: 0.18em;
+  color: rgba(41, 39, 32, 0.4);
+}
+
+.hero__hint-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--orange);
+  opacity: 0.7;
+}
+
+/* --------------------------------------------------------------- 滚动提示 */
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(12px, 2.2vh, 26px);
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  color: rgba(41, 39, 32, 0.45);
+  text-decoration: none;
+  font: 9px/1 Inter, sans-serif;
+  letter-spacing: 0.34em;
+  opacity: calc(1 - var(--hero-progress, 0) * 3.2);
+  transition: color 240ms var(--ease-ink);
+}
+
+.hero__cue:hover {
+  color: var(--ink);
+}
+
+.hero__cue-rule {
+  width: 1px;
+  height: 36px;
+  transform-origin: top center;
+  background: linear-gradient(to bottom, rgba(41, 39, 32, 0.06), rgba(41, 39, 32, 0.55));
+  animation: cue-flow 3.6s ease-in-out infinite;
+}
+
+@keyframes cue-flow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scaleY(0.72);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+/* --------------------------------------------------------------- 焦点可见 */
+.hero a:focus-visible,
+.hero__cue:focus-visible {
+  outline: 1px solid var(--orange);
+  outline-offset: 4px;
+}
+
+/* --------------------------------------------------------------- 竖屏 / 窄屏 */
+@media (max-width: 900px) {
+  .hero {
+    min-height: 100svh;
+    justify-content: center;
+    padding: calc(var(--nav-h) + 14px) 0 clamp(36px, 7vh, 60px);
+    gap: 0;
+  }
+
+  /* 竖屏不再叠加文字：画作完整在上，文字在下 */
+  .hero__stage {
+    width: 100%;
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ink-scene {
+    position: relative;
+    inset: auto;
+    width: 100%;
+  }
+
+  .hero__veil {
+    display: none;
+  }
+
+  .hero__intro {
+    position: static;
+    width: auto;
+    max-width: 620px;
+    padding: clamp(26px, 6vw, 40px) clamp(22px, 7vw, 48px) 0;
+    transform: none;
+    opacity: 1;
+  }
+
+  .hero__title {
+    font-size: clamp(23px, 6vw, 32px);
+    line-height: 1.66;
+    letter-spacing: 0.06em;
+  }
+
+  .hero__hint {
+    display: none;
+  }
+
+  .hero__cue {
+    display: none;
+  }
+
+  .btn {
+    padding: 13px 18px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero__actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn {
+    justify-content: center;
+    letter-spacing: 0.16em;
+  }
+}
+
+/* --------------------------------------------------------------- 高度很矮的横屏 */
+@media (max-height: 620px) and (min-width: 901px) {
+  .hero {
+    padding-top: 10px;
+    padding-bottom: 40px;
+  }
+
+  .hero__title {
+    font-size: clamp(20px, 2.2vw, 30px);
+  }
+
+  .hero__cue {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------- 减少动态 */
+@media (prefers-reduced-motion: reduce) {
+  .hero__intro {
+    transform: translate3d(0, -50%, 0);
+    opacity: 1;
+  }
+
+  .hero__cue-rule {
+    animation: none;
+  }
+
+  .site-header.site-header--overlay {
+    transition: none;
+  }
+}

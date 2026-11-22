@@ -1,0 +1,57 @@
+{
+ "canvas": {
+  "width": 1744,
+  "height": 1013,
+  "pad": 36,
+  "artW": 1672,
+  "artH": 941
+ },
+ "layers": [
+  {
+   "name": "sun",
+   "x": 1177,
+   "y": 181,
+   "w": 185,
+   "h": 156,
+   "z": 2,
+   "depth": 0.12
+  },
+  {
+   "name": "cranes",
+   "x": 853,
+   "y": 249,
+   "w": 302,
+   "h": 148,
+   "z": 3,
+   "depth": 0.18
+  },
+  {
+   "name": "boat",
+   "x": 554,
+   "y": 809,
+   "w": 182,
+   "h": 102,
+   "z": 5,
+   "depth": 0.35
+  },
+  {
+   "name": "pavilion",
+   "x": 1089,
+   "y": 491,
+   "w": 140,
+   "h": 105,
+   "z": 4,
+   "depth": 0.22
+  },
+  {
+   "name": "pine",
+   "x": 1135,
+   "y": 606,
+   "w": 609,
+   "h": 407,
+   "z": 6,
+   "depth": 0.55
+  }
+ ],
+ "lqip": "UklGRqIAAABXRUJQVlA4IJYAAABwBACdASogABMAPtlWpEyoJKOiN/VYAQAbCWcAzNBcl/B+gapw3DYHVIM04AD+8UNfv+taKApHTv96tvqxcZYo9tTY0DvsMJgnUwpzMDUrlpOzcr0WRq8knitC/csnL7ds/lGgI9MKmDkyXJb/+2XfQh+c7VGVWbMxi3elHsohtzksa30ev8nxeO9JeZlA5F+fdZ8AAAA="
+}

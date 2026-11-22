@@ -6,11 +6,17 @@ import "../styles/global.css";
 interface Props {
   title?: string;
   description?: string;
+  /** solid: 常规吸顶导航；overlay: 首页浮在水墨画上的导航 */
+  headerVariant?: "solid" | "overlay";
+  /** 首页首屏：预加载山水画底图，避免 LCP 等待 */
+  preloadHero?: boolean;
 }
 
 const {
   title = "ORANGY ZC. · 个人数字空间",
   description = "一个关于创造、探索与数字实验的个人空间。",
+  headerVariant = "solid",
+  preloadHero = false,
 } = Astro.props;
 ---
 
@@ -22,11 +28,26 @@ const {
     <meta name="theme-color" content="#F5F0E6" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {
+      preloadHero && (
+        <link
+          rel="preload"
+          as="image"
+          href="/images/landscape/background.webp"
+          type="image/webp"
+          fetchpriority="high"
+        />
+      )
+    }
     <title>{title}</title>
+    <script is:inline>
+      document.documentElement.classList.add("has-js");
+    </script>
   </head>
   <body id="top">
-    <SiteHeader />
-    <main>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <SiteHeader variant={headerVariant} />
+    <main id="main">
       <slot />
     </main>
     <SiteFooter />

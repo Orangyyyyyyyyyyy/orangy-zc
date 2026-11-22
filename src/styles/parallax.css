@@ -1,0 +1,168 @@
+/* ==========================================================================
+   水墨视差 —— 图层机制
+   每帧只在 .ink-scene 上写两个变量（--px / --py），位移由 CSS 逐层计算。
+   ========================================================================== */
+
+.ink-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  --px: 0;
+  --py: 0;
+  --scene-w: 1200px;
+  isolation: isolate;
+  background-color: var(--paper-ink, #f3e3cb);
+}
+
+/* 图层底片：极低分辨率占位，避免首屏白闪 */
+.ink-scene__plate {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--paper-ink, #f3e3cb);
+  background-image: var(--lqip, none);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transition: opacity 820ms ease;
+}
+
+.ink-scene.is-ready .ink-scene__plate {
+  opacity: 0;
+}
+
+.ink-layer {
+  position: absolute;
+  left: var(--l-x, 0%);
+  top: var(--l-y, 0%);
+  width: var(--l-w, 100%);
+  z-index: var(--l-z, 1);
+  transform: translate3d(
+    calc(var(--px) * var(--l-shift, 0) * var(--scene-w) * -1),
+    calc(var(--py) * var(--l-shift, 0) * var(--scene-w) * -1),
+    0
+  );
+  will-change: transform;
+  pointer-events: none;
+  backface-visibility: hidden;
+}
+
+.ink-layer--background {
+  --l-x: 0%;
+  --l-y: 0%;
+  --l-w: 100%;
+}
+
+.ink-layer picture,
+.ink-layer img {
+  display: block;
+  width: 100%;
+  height: auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* --------------------------------------------------------------- 细微动态 */
+/* 太阳：极轻的呼吸，形状不变 */
+.ink-layer.is-sun-breathe img {
+  transform-origin: 50% 62%;
+  animation: sun-breathe 27s ease-in-out infinite;
+}
+
+@keyframes sun-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.96;
+  }
+  50% {
+    transform: scale(1.0075);
+    opacity: 1;
+  }
+}
+
+/* 仙鹤：两层不同周期的漂移，保持两只之间的距离与姿态 */
+.ink-layer.is-cranes-drift img {
+  animation: cranes-drift 43s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+@keyframes cranes-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  28% {
+    transform: translate3d(0.9%, -1.1%, 0);
+  }
+  61% {
+    transform: translate3d(-0.4%, 0.6%, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* 松树：以树干根部为轴的极轻摆动，不做夸张晃动 */
+.ink-layer.is-pine-sway img {
+  transform-origin: 57% 97%;
+  animation: pine-sway 24s ease-in-out infinite;
+}
+
+@keyframes pine-sway {
+  0%,
+  100% {
+    transform: rotate(-0.2deg);
+  }
+  50% {
+    transform: rotate(0.24deg);
+  }
+}
+
+/* --------------------------------------------------------------- 云雾与纸纹 */
+.ink-scene__mist {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 34% at 34% 64%, rgba(255, 252, 244, 0.5), rgba(255, 252, 244, 0) 68%),
+    radial-gradient(42% 26% at 68% 47%, rgba(255, 252, 244, 0.34), rgba(255, 252, 244, 0) 70%);
+  opacity: 0.16;
+  mix-blend-mode: screen;
+  animation: mist-drift 96s ease-in-out infinite alternate;
+}
+
+@keyframes mist-drift {
+  0% {
+    transform: translate3d(-1.2%, 0.4%, 0);
+  }
+  100% {
+    transform: translate3d(1.4%, -0.5%, 0);
+  }
+}
+
+.ink-scene__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0.2;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* --------------------------------------------------------------- 减少动态 */
+@media (prefers-reduced-motion: reduce) {
+  .ink-layer {
+    transform: none !important;
+  }
+
+  .ink-layer img,
+  .ink-scene__mist {
+    animation: none !important;
+  }
+
+  .ink-scene__mist {
+    opacity: 0.16;
+  }
+}
